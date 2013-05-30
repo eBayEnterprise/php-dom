@@ -1,4 +1,4 @@
-GSI External Business to Consumer Magento Extension
+GSI DOM Extension
 ===================================================
-
-Please see [the functional requirements specification](https://trueaction.atlassian.net/wiki/display/EBC/Functional+Requirements+Specification).
+Extends the built-in PHP DOM library to make generating
+xml less tedious.
