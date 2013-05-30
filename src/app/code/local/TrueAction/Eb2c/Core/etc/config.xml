@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Module configuration
+ *
+ * @author TrueAction
+ */
+-->
+<config>
+	<modules>
+		<TrueAction_Eb2c_Core>
+			<version>0.1.0</version>
+		</TrueAction_Eb2c_Core>
+	</modules>
+	<global>
+		<models>
+			<eb2ccore>
+				<class>TrueAction_Eb2c_Core_Model</class>
+			</eb2ccore>
+		</models>
+	</global>
+	<phpunit>
+		<suite>
+			<modules>
+				<TrueAction_Eb2c_Core />
+			</modules>
+		</suite>
+	</phpunit>
+</config>
