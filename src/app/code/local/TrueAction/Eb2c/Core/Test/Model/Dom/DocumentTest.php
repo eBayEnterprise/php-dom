@@ -1,12 +1,12 @@
 <?php
-class TrueAction_Eb2c_Core_Test_Model_TrueDomDocumentTest extends EcomDev_PHPUnit_Test_Case
+class TrueAction_Eb2c_Core_Test_Model_Dom_DocumentTest extends EcomDev_PHPUnit_Test_Case
 {
 	/**
 	 * @test
 	 */
 	public function testUsage()
 	{
-		$doc = new TrueAction_Eb2c_Core_Model_TrueDom_Document();
+		$doc = new TrueAction_Eb2c_Core_Model_Dom_Document();
 		$root = $doc->appendChild(
 			$doc->createElement('testroot')
 		);
