@@ -6,7 +6,7 @@ class TrueAction_Eb2c_Core_Test_Model_TrueDomDocumentTest extends EcomDev_PHPUni
 	 */
 	public function testUsage()
 	{
-		$doc = new TrueAction_Eb2c_Core_Model_TrueDomDocument();
+		$doc = new TrueAction_Eb2c_Core_Model_TrueDom_Document();
 		$root = $doc->appendChild(
 			$doc->createElement('testroot')
 		);
