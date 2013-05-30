@@ -22,5 +22,16 @@ class TrueAction_Eb2c_Core_Test_Model_Dom_DocumentTest extends EcomDev_PHPUnit_T
 			$child,
 			$doc->getElementById('234')
 		);
+		$childt2_0 = $child->createChild(
+			'child2',
+			'test<val'
+		);
+		$childt2_1 = $child->createChild(
+			'child2',
+			'test&val'
+		);
 	}
+
+
+
 }
