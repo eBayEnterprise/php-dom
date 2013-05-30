@@ -9,4 +9,14 @@ class TrueAction_Eb2c_Core_Model_Dom_Document extends DOMDocument
 			'TrueAction_Eb2c_Core_Model_Dom_Element'
 		);
 	}
+
+	public function createElement($name, $value=null)
+	{
+		$el = parent::createElement($name);
+		if (is_string($value)) {
+			$this->appendChild($el);
+			$el->appendChild(new DOMCdataSection($value));
+		}
+		return $el;
+	}
 }
