@@ -10,7 +10,8 @@ class TrueAction_Dom_Model_Element extends DOMElement {
 	 * @example $ex1 = $tde->createChild('foo', 'bar', array('fizzy'=>'wizzy')) -> "<foo fizzy='wizzy'>bar</foo>"
 	 * @example $tde->createChild('xyzzy', $ex1) -> "<xyzzy><foo fizzy='wizzy'>bar</foo></xyzzy>"
 	 */
-	public function createChild($name, $val = null, array $attrs = null) {
+	public function createChild($name, $val = null, array $attrs = null)
+	{
 		$el = $this->appendChild(new TrueAction_Dom_Model_Element($name));
 		if (!is_null($attrs)) {
 			foreach($attrs as $attrName => $attrVal) {
@@ -23,5 +24,20 @@ class TrueAction_Dom_Model_Element extends DOMElement {
 	      	$el->appendChild($val);
 	    }
 		return $el;
+	}
+
+	/**
+	 * adds an attibute as an id and returns $this to allow chaining.
+	 * @param string $name
+	 * @param string $val
+	 * @param TrueAction_Dom_Model_Element
+	 */
+	public function addIdAttribute($name, $val = null)
+	{
+		if (!$this->hasAttribute($name)) {
+			$this->setAttribute($name, $val);
+		}
+		$this->setIdAttribute($name, true);
+		return $this;
 	}
 }
