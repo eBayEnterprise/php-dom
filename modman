@@ -1,2 +1,1 @@
-src/app/etc/modules/*.xml app/etc/modules/
-src/app/code/local/TrueAction/Dom app/code/local/TrueAction/Dom
+src/lib/TrueAction/Dom lib/TrueAction/Dom
