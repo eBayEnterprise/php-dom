@@ -20,13 +20,17 @@ class TrueAction_Dom_Document extends DOMDocument
 	public function createElement($name, $val=null)
 	{
 		$el = parent::createElement($name);
-		if (is_string($val)) {
-			$val = new DOMCdataSection($val);
+		if (!is_null($val)) {
+			if (is_string($val)) {
+				$val = new DOMCdataSection($val);
+			}
+			// Attach the created node to the DOMDocument to make it writable
+			// so we can append the $val node to it.
+			$child = $this->appendChild($el);
+			$child->appendChild($val);
+			$this->removeChild($el);
 		}
-		// Attach the created node to the DOMDocument to make it writable
-		// so we can append the $val node to it.
-		$this->appendChild($el)->appendChild($val);
 		// Then detach it because we only wanted it writable, not attached.
-		return $this->removeChild($el);
+		return $el;
 	}
 }
