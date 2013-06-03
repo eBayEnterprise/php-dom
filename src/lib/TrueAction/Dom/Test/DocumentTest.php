@@ -10,25 +10,16 @@ class TrueAction_Dom_Test_DocumentTest extends EcomDev_PHPUnit_Test_Case
 		$root = $doc->appendChild(
 			$doc->createElement('testroot')
 		);
-		$child = $root->createChild(
-			'testchild',
-			'testval',
-			array('ref'=>'1', 'foo'=>'baz', '_1234'=>'biz', 'id'=>'234')
-		);
-		$child->setIdAttribute('id', true);
-		$this->assertSame(1, count($doc->getElementsByTagName('testroot')));
-		$this->assertSame(1, count($doc->getElementsByTagName('testchild')));
 		$this->assertSame(
-			$child,
-			$doc->getElementById('234')
+			'TrueAction_Dom_Element',
+			get_class($root)
 		);
-		$childt2_0 = $child->createChild(
-			'child2',
-			'test<val'
+		$this->assertTrue(
+			$doc->hasChildNodes()
 		);
-		$childt2_1 = $child->createChild(
-			'child2',
-			'test&val'
+		$this->assertSame(
+			'testroot',
+			$doc->firstChild->nodeName
 		);
 	}
 }
