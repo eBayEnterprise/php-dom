@@ -11,26 +11,35 @@ class TrueAction_Dom_Document extends DOMDocument
 	}
 
 	/**
-	 * Create a TrueAction_Dom_Element node with the specified name and value.
+	 * Create and attach a TrueAction_Dom_Element node with the
+	 * specified name and value.
 	 *
-	 * @param string $name The node name for the element to be created.
-	 * @param string|DOMNode $val A CDATA string or node to be appended to the created node.
+	 * @param string $name The node name for the element to be created
+	 * @param string|DOMNode $val A CDATA string or node to be appended
+	 *        to the created node
+	 * @return TrueAction_Dom_Document This document
+	 */
+	public function addElement($name, $val = null)
+	{
+		$this->appendChild(new TrueAction_Dom_Element($name))
+			->appendChild(is_string($val) ? new DOMCdataSection($val) : new DOMText($val));
+		return $this;
+	}
+
+	/**
+	 * Same as addElement, except returns
+	 * the created element without attaching it.
+	 *
+	 * @see self::addElement
 	 * @return TrueAction_Dom_Element The created node.
 	 */
-	public function createElement($name, $val=null)
+	public function createElement($name, $val = null)
 	{
-		$el = parent::createElement($name);
-		if (!is_null($val)) {
-			if (is_string($val)) {
-				$val = new DOMCdataSection($val);
-			}
-			// Attach the created node to the DOMDocument to make it writable
-			// so we can append the $val node to it.
-			$child = $this->appendChild($el);
-			$child->appendChild($val);
-			$this->removeChild($el);
-		}
-		// Then detach it because we only wanted it writable, not attached.
-		return $el;
+		// Append the new element in order to append its child.
+		$el = $this->appendChild(new TrueAction_Dom_Element($name));
+		$el->appendChild(is_string($val) ? new DOMCdataSection($val) : new DOMText($val));
+		// Then remove the new element because we didn't really want
+		// to attach it.
+		return $this->removeChild($el);
 	}
 }
