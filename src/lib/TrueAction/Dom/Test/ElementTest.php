@@ -1,0 +1,34 @@
+<?php
+class TrueAction_Dom_Test_ElementTest extends EcomDev_PHPUnit_Test_Case
+{
+	/**
+	 * @test
+	 */
+	public function testUsage()
+	{
+		$doc = new TrueAction_Dom_Document();
+		$root = $doc->appendChild(
+			$doc->createElement('testroot')
+		);
+		$child = $root->createChild(
+			'testchild',
+			'testval',
+			array('ref'=>'1', 'foo'=>'baz', '_1234'=>'biz', 'id'=>'234')
+		);
+		$child->setIdAttribute('id', true);
+		$this->assertSame(1, count($doc->getElementsByTagName('testroot')));
+		$this->assertSame(1, count($doc->getElementsByTagName('testchild')));
+		$this->assertSame(
+			$child,
+			$doc->getElementById('234')
+		);
+		$childt2_0 = $child->createChild(
+			'child2',
+			'test<val'
+		);
+		$childt2_1 = $child->createChild(
+			'child2',
+			'test&val'
+		);
+	}
+}
