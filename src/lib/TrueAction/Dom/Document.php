@@ -21,8 +21,10 @@ class TrueAction_Dom_Document extends DOMDocument
 	 */
 	public function addElement($name, $val = null)
 	{
-		$this->appendChild(new TrueAction_Dom_Element($name))
-			->appendChild(is_string($val) ? new DOMCdataSection($val) : new DOMText($val));
+		$el = $this->appendChild(new TrueAction_Dom_Element($name))
+		if (!is_null($val)) {
+			$el->appendChild(is_string($val) ? new DOMCdataSection($val) : $val);
+		}
 		return $this;
 	}
 
@@ -37,9 +39,12 @@ class TrueAction_Dom_Document extends DOMDocument
 	{
 		// Append the new element in order to append its child.
 		$el = $this->appendChild(new TrueAction_Dom_Element($name));
-		$el->appendChild(is_string($val) ? new DOMCdataSection($val) : new DOMText($val));
-		// Then remove the new element because we didn't really want
-		// to attach it.
-		return $this->removeChild($el);
+		if (!is_null($val)) {
+			$el->appendChild(is_string($val) ? new DOMCdataSection($val) : $val);
+			// Then remove the new element because we didn't really want
+			// to attach it.
+			$this->removeChild($el);
+		}
+		return $el;
 	}
 }

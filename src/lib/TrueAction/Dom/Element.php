@@ -19,10 +19,9 @@ class TrueAction_Dom_Element extends DOMElement {
 				$el->setAttribute($attrName, $attrVal);
 			}
 		}
-		if (is_string($val)) {
-			$val = new DOMCdataSection($val);
+		if (!is_null($val)) {
+			$el->appendChild(is_string($val) ? new DOMCdataSection($val) : $val);
 		}
-		$el->appendChild($val);
 		return $el;
 	}
 
