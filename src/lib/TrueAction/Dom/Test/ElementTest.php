@@ -46,10 +46,42 @@ class TrueAction_Dom_Test_ElementTest extends EcomDev_PHPUnit_Test_Case
 	/**
 	 * @test
 	 */
+	public function testCreateChildDomNode()
+	{
+		$child = $this->root->createChild('foooo', new DOMText('this is a test'));
+		$this->assertSame('foooo', $child->nodeName);
+		$this->assertSame('this is a test', $child->textContent);
+	}
+
+
+	/**
+	 * @test
+	 */
+	public function testCreateChildNoOptionals()
+	{
+		$child = $this->root->createChild('foooo');
+		$this->assertSame('foooo', $child->nodeName);
+	}
+
+	/**
+	 * @test
+	 */
 	public function testSetAttribute()
 	{
-		$this->root->setAttribute('foo', '234', true);
+		$attr = $this->root->setAttribute('foo', '234', true);
 		$this->assertTrue($this->root->getAttributeNode('foo')->isId());
 		$this->assertSame($this->root, $this->doc->getElementById('234'));
+		$this->assertSame('DOMAttr', get_class($attr));
+	}
+
+	/**
+	 * @test
+	 */
+	public function testAddAttribute()
+	{
+		$el = $this->root->addAttribute('foo', '234', true);
+		$this->assertTrue($this->root->getAttributeNode('foo')->isId());
+		$this->assertSame($this->root, $this->doc->getElementById('234'));
+		$this->assertSame($this->root, $el);
 	}
 }
