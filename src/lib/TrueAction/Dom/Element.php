@@ -37,7 +37,7 @@ class TrueAction_Dom_Element extends DOMElement {
 	 */
 	public function setAttribute($name, $val = null, $isId = false)
 	{
-		$attr = $this->setAttribute($name, $value);
+		$attr = parent::setAttribute($name, $val);
 		$this->setIdAttribute($name, $isId);
 		return $attr;
 	}
