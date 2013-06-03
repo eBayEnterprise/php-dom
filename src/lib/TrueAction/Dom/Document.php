@@ -21,7 +21,7 @@ class TrueAction_Dom_Document extends DOMDocument
 	 */
 	public function addElement($name, $val = null)
 	{
-		$el = $this->appendChild(new TrueAction_Dom_Element($name))
+		$el = $this->appendChild(new TrueAction_Dom_Element($name));
 		if (!is_null($val)) {
 			$el->appendChild(is_string($val) ? new DOMCdataSection($val) : $val);
 		}
