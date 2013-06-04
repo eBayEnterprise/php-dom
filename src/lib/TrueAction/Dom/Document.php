@@ -19,12 +19,18 @@ class TrueAction_Dom_Document extends DOMDocument
 	 *        to the created node
 	 * @return TrueAction_Dom_Document This document
 	 */
-	public function addElement($name, $val = null)
+	public function addElement($name, $val = null, $nsUri = '')
 	{
 		$el = $this->appendChild(new TrueAction_Dom_Element($name));
 		if (!is_null($val)) {
 			$el->appendChild(is_string($val) ? new DOMCdataSection($val) : $val);
 		}
+
+		// adding ns attribute to root document
+		if (trim($nsUri) !== '') {
+			$this->createAttributeNS($nsUri, $name);
+		}
+
 		return $this;
 	}
 
@@ -35,7 +41,7 @@ class TrueAction_Dom_Document extends DOMDocument
 	 * @see self::addElement
 	 * @return TrueAction_Dom_Element The created node.
 	 */
-	public function createElement($name, $val = null)
+	public function createElement($name, $val = null, $nsUri = '')
 	{
 		// Append the new element in order to append its child.
 		$el = $this->appendChild(new TrueAction_Dom_Element($name));
@@ -45,6 +51,12 @@ class TrueAction_Dom_Document extends DOMDocument
 			// to attach it.
 			$this->removeChild($el);
 		}
+
+		// adding ns attribute to root document
+		if (trim($nsUri) !== '') {
+			$this->createAttributeNS($nsUri, $name);
+		}
+
 		return $el;
 	}
 }
