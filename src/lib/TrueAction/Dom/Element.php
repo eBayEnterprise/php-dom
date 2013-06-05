@@ -26,6 +26,25 @@ class TrueAction_Dom_Element extends DOMElement {
 	}
 
 	/**
+	 * create child nodes using the specified createChild arguments from the array.
+	 * @param  array  $childSpecs
+	 * @return TrueAction_Dom_Element
+	 */
+	public function createChildren(array $childArgs)
+	{
+		foreach ($childArgs as $args) {
+			$numArgs = count($args);
+			if ($numArgs > 0) {
+				$attrs = ($numArgs > 2) ? $args[2] : null;
+				$val   = ($numArgs > 1) ? $args[1] : null;
+				$name  = $args[0];
+				$this->createChild($name, $val, $attrs);
+			}
+		}
+		return $this;
+	}
+
+	/**
 	 * Add an attribute as an id.
 	 *
 	 * @param string $name The name of the attribute
