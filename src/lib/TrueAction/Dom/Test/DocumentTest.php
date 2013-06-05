@@ -1,5 +1,5 @@
 <?php
-class TrueAction_Dom_Test_DocumentTest extends EcomDev_PHPUnit_Test_Case
+class TrueAction_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 {
 	/**
 	 * @test
@@ -20,6 +20,40 @@ class TrueAction_Dom_Test_DocumentTest extends EcomDev_PHPUnit_Test_Case
 		$this->assertSame(
 			'testroot',
 			$doc->firstChild->nodeName
+		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function testAddElementWithNs()
+	{
+		$doc = new TrueAction_Dom_Document('1.0', 'UTF-8');
+		$expected = '<?xml version="1.0" encoding="UTF-8"?>
+<root xmlns="http://api.gsicommerce.com/schema/checkout/1.0"><![CDATA[test with addElement method]]></root>';
+
+		$doc->addElement('root', 'test with addElement method', 'http://api.gsicommerce.com/schema/checkout/1.0');
+		$this->assertSame(
+			$expected,
+			trim($doc->saveXML())
+		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function testCreateElementWithNs()
+	{
+		$doc = new TrueAction_Dom_Document('1.0', 'UTF-8');
+		$expected = '<?xml version="1.0" encoding="UTF-8"?>
+<root xmlns="http://api.gsicommerce.com/schema/checkout/1.0"><![CDATA[test with CreateElement method]]></root>';
+
+		$doc->appendChild(
+			$doc->createElement('root', 'test with CreateElement method', 'http://api.gsicommerce.com/schema/checkout/1.0')
+		);
+		$this->assertSame(
+			$expected,
+			trim($doc->saveXML())
 		);
 	}
 }

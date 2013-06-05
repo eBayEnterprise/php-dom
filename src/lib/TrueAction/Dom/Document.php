@@ -40,7 +40,7 @@ class TrueAction_Dom_Document extends DOMDocument
 	public function createElement($name, $val = null, $nsUri = '')
 	{
 		// Append the new element in order to append its child.
-		$el = $this->appendChild(new TrueAction_Dom_Element($name), '', $nsUri);
+		$el = $this->appendChild(new TrueAction_Dom_Element($name, '', $nsUri));
 		if (!is_null($val)) {
 			$el->appendChild(is_string($val) ? new DOMCdataSection($val) : $val);
 			// Then remove the new element because we didn't really want

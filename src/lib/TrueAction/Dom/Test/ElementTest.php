@@ -1,5 +1,5 @@
 <?php
-class TrueAction_Dom_Test_ElementTest extends EcomDev_PHPUnit_Test_Case
+class TrueAction_Dom_Test_ElementTest extends PHPUnit_Framework_TestCase
 {
 	public function setUp()
 	{
@@ -83,5 +83,24 @@ class TrueAction_Dom_Test_ElementTest extends EcomDev_PHPUnit_Test_Case
 		$this->assertTrue($this->root->getAttributeNode('foo')->isId());
 		$this->assertSame($this->root, $this->doc->getElementById('234'));
 		$this->assertSame($this->root, $el);
+	}
+
+	/**
+	 * @test
+	 */
+	public function testCreateChildWithNsAttribute()
+	{
+		$this->root->createChild(
+			'childElement',
+			'test element addChild method',
+			array('ref'=>'1'),
+			'http://api.gsicommerce.com/schema/checkout/1.0'
+		);
+		$expected = '<?xml version=""?>
+<testroot><childElement xmlns="http://api.gsicommerce.com/schema/checkout/1.0" ref="1"><![CDATA[test element addChild method]]></childElement></testroot>';
+		$this->assertSame(
+			$expected,
+			trim($this->doc->saveXML())
+		);
 	}
 }
