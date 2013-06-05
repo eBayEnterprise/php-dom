@@ -7,13 +7,14 @@ class TrueAction_Dom_Element extends DOMElement {
 	 * @param string $name The name of the element to create.
 	 * @param string|DOMNode $val The child node to append to the created element.
 	 * @param array $attrs Array of attribute names and values to append to the created element.
+	 * @param string $nsUri The ns attribute uri for the element
 	 * @example $ex1 = $tde->createChild('foo', 'bar', array('fizzy'=>'wizzy')) -> "<foo fizzy='wizzy'>bar</foo>"
 	 * @example $tde->createChild('xyzzy', $ex1) -> "<xyzzy><foo fizzy='wizzy'>bar</foo></xyzzy>"
 	 * @return TrueAction_Dom_Element the created TrueAction_Dom_Element
 	 */
-	public function createChild($name, $val = null, array $attrs = null)
+	public function createChild($name, $val = null, array $attrs = null, $nsUri = '')
 	{
-		$el = $this->appendChild(new TrueAction_Dom_Element($name));
+		$el = $this->appendChild(new TrueAction_Dom_Element($name, '', $nsUri));
 		if (!is_null($attrs)) {
 			foreach ($attrs as $attrName => $attrVal) {
 				$el->setAttribute($attrName, $attrVal);

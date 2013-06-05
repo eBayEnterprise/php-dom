@@ -17,14 +17,16 @@ class TrueAction_Dom_Document extends DOMDocument
 	 * @param string $name The node name for the element to be created
 	 * @param string|DOMNode $val A CDATA string or node to be appended
 	 *        to the created node
+	 * @param string $nsUri The ns attribute uri for the element
 	 * @return TrueAction_Dom_Document This document
 	 */
-	public function addElement($name, $val = null)
+	public function addElement($name, $val = null, $nsUri = '')
 	{
-		$el = $this->appendChild(new TrueAction_Dom_Element($name));
+		$el = $this->appendChild(new TrueAction_Dom_Element($name, '', $nsUri));
 		if (!is_null($val)) {
 			$el->appendChild(is_string($val) ? new DOMCdataSection($val) : $val);
 		}
+
 		return $this;
 	}
 
@@ -35,16 +37,17 @@ class TrueAction_Dom_Document extends DOMDocument
 	 * @see self::addElement
 	 * @return TrueAction_Dom_Element The created node.
 	 */
-	public function createElement($name, $val = null)
+	public function createElement($name, $val = null, $nsUri = '')
 	{
 		// Append the new element in order to append its child.
-		$el = $this->appendChild(new TrueAction_Dom_Element($name));
+		$el = $this->appendChild(new TrueAction_Dom_Element($name, '', $nsUri));
 		if (!is_null($val)) {
 			$el->appendChild(is_string($val) ? new DOMCdataSection($val) : $val);
 			// Then remove the new element because we didn't really want
 			// to attach it.
 			$this->removeChild($el);
 		}
+
 		return $el;
 	}
 }
