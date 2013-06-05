@@ -27,7 +27,7 @@ class TrueAction_Dom_Element extends DOMElement {
 
 	/**
 	 * create child nodes using the specified createChild arguments from the array.
-	 * @param  array  $childSpecs
+	 * @param  array  $childArgs
 	 * @return TrueAction_Dom_Element
 	 */
 	public function createChildren(array $childArgs)
