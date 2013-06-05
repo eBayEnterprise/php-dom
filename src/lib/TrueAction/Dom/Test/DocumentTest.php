@@ -56,4 +56,19 @@ class TrueAction_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 			trim($doc->saveXML())
 		);
 	}
+
+	public function testSetNode()
+	{
+		$doc = new TrueAction_Dom_Document();
+		$node = $doc->setNode('/');
+		$this->assertNull($node);
+		$node = $doc->setNode('');
+		$this->assertNull($node);
+		$node = $doc->setNode('foo/bar');
+		$this->assertSame($node, $doc->firstChild->firstChild);
+		$node = $doc->setNode('bar/baz');
+		$this->assertSame($node, $doc->firstChild->nextSibling->firstChild);
+		$node = $doc->setNode('bar');
+		$this->assertSame($node, $doc->firstChild->nextSibling->nextSibling);
+	}
 }
