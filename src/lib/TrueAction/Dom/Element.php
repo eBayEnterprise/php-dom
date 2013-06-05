@@ -1,5 +1,17 @@
 <?php
 class TrueAction_Dom_Element extends DOMElement {
+	/**
+	 * create a child node and return the parent.
+	 * @param string         $name
+	 * @param string|DOMNode $val
+	 * @param array          $attrs
+	 * @return TrueAction_Dom_Element
+	 */
+	public function addChild($name, $val = null, array $attrs = null, $nsUri = '')
+	{
+		$this->createChild($name, $val, $attrs, $nsUri);
+		return $this;
+	}
 
 	/**
 	 * Create and append a child to this element.
@@ -20,25 +32,6 @@ class TrueAction_Dom_Element extends DOMElement {
 			$el->appendChild(is_string($val) ? new DOMCdataSection($val) : $val);
 		}
 		return $el;
-	}
-
-	/**
-	 * create child nodes using the specified createChild arguments from the array.
-	 * @param  array  $childArgs
-	 * @return TrueAction_Dom_Element
-	 */
-	public function createChildren(array $childArgs)
-	{
-		foreach ($childArgs as $args) {
-			$numArgs = count($args);
-			if ($numArgs > 0) {
-				$attrs = ($numArgs > 2) ? $args[2] : null;
-				$val   = ($numArgs > 1) ? $args[1] : null;
-				$name  = $args[0];
-				$this->createChild($name, $val, $attrs);
-			}
-		}
-		return $this;
 	}
 
 	/**

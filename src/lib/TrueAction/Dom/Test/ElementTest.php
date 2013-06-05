@@ -29,6 +29,20 @@ class TrueAction_Dom_Test_ElementTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
+	public function testAddChild()
+	{
+		$node = $this->root->addChild(
+			'testchild',
+			'testval',
+			array('ref'=>'1', 'foo'=>'baz', '_1234'=>'biz', 'id'=>'234')
+		);
+		$this->assertSame($this->root, $node);
+	}
+
+
+	/**
+	 * @test
+	 */
 	public function testCreateChildSpecialChars()
 	{
 		$child1 = $this->root->createChild(
@@ -102,33 +116,6 @@ class TrueAction_Dom_Test_ElementTest extends PHPUnit_Framework_TestCase
 			$expected,
 			trim($this->doc->saveXML())
 		);
-	}
-
-
-	/**
-	 * @test
-	 */
-	public function testCreateChildren()
-	{
-		$childArgs = array(
-			array('test_node', 'test_value', array('ref' => 'ref value')),
-			array('test_node2', 'test_value2'),
-			array('test_node3')
-		);
-		$node = $this->root->createChildren($childArgs);
-		$this->assertSame($this->root, $node);
-		$node = $this->root->firstChild;
-		$this->assertSame('test_node', $node->nodeName);
-		$this->assertSame('test_value', $node->textContent);
-		$this->assertSame('ref value', $node->getAttribute('ref'));
-		$node = $node->nextSibling;
-		$this->assertSame('test_node2', $node->nodeName);
-		$this->assertSame('test_value2', $node->textContent);
-		$this->assertFalse($node->hasAttributes());
-		$node = $node->nextSibling;
-		$this->assertSame('test_node3', $node->nodeName);
-		$this->assertSame('', $node->textContent);
-		$this->assertFalse($node->hasAttributes());
 	}
 
 	/**
