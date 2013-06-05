@@ -130,4 +130,52 @@ class TrueAction_Dom_Test_ElementTest extends PHPUnit_Framework_TestCase
 		$this->assertSame('', $node->textContent);
 		$this->assertFalse($node->hasAttributes());
 	}
+
+	/**
+	 * @test
+	 */
+	public function testSetNode()
+	{
+		$node = $this->root->setNode('foo');
+		$this->assertSame($this->root->firstChild, $node);
+		$node = $this->root->setNode('foo/bar/baz');
+		$this->assertSame($node, $this->root->firstChild->firstChild->firstChild);
+		$this->root->createChild('foo');
+		$this->assertSame('foo', $this->root->firstChild->nextSibling->nodeName);
+		$node = $this->root->setNode('foo/bar/biz');
+		$this->assertSame($node, $this->root->firstChild->firstChild->firstChild->nextSibling);
+		$this->assertSame('biz', $this->root->firstChild->firstChild->firstChild->nextSibling->nodeName);
+		$node = $this->root->setNode('foo/bar/biz', 'bizval', array('a' => 'a val'));
+		$this->assertSame(
+			'biz',
+			$this->root->firstChild->firstChild->firstChild->nextSibling->nextSibling->nodeName
+		);
+		$this->assertNotSame(
+			$this->root->firstChild->firstChild->firstChild->nextSibling,
+			$this->root->firstChild->firstChild->firstChild->nextSibling->nextSibling
+		);
+		$this->assertSame(
+			'bizval',
+			$this->root->firstChild->firstChild->firstChild->nextSibling->nextSibling->textContent
+		);
+		$this->assertSame(
+			'a val',
+			$this->root->firstChild->firstChild->firstChild->nextSibling->nextSibling->getAttribute('a')
+		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function testAddAttributes()
+	{
+		$node = $this->root->addAttributes(
+			array('ref'=>'1', 'foo'=>'baz', '_1234'=>'biz', 'id'=>'234')
+		);
+		$this->assertSame($this->root, $node);
+		$this->assertSame('1', $this->root->getAttribute('ref'));
+		$this->assertSame('baz', $this->root->getAttribute('foo'));
+		$this->assertSame('biz', $this->root->getAttribute('_1234'));
+		$this->assertSame('234', $this->root->getAttribute('id'));
+	}
 }

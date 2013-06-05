@@ -15,11 +15,7 @@ class TrueAction_Dom_Element extends DOMElement {
 	public function createChild($name, $val = null, array $attrs = null, $nsUri = '')
 	{
 		$el = $this->appendChild(new TrueAction_Dom_Element($name, '', $nsUri));
-		if (!is_null($attrs)) {
-			foreach ($attrs as $attrName => $attrVal) {
-				$el->setAttribute($attrName, $attrVal);
-			}
-		}
+		$el->addAttributes($attrs);
 		if (!is_null($val)) {
 			$el->appendChild(is_string($val) ? new DOMCdataSection($val) : $val);
 		}
@@ -46,6 +42,40 @@ class TrueAction_Dom_Element extends DOMElement {
 	}
 
 	/**
+	 * create all nodes along a given path relative to the current node.
+	 * any nodes along the path that do not exist will be created.
+	 * NOTE: for any element along the path except the leaf (last) element,
+	 *  only the first matching node will be traversed if the element matches multiple siblings.
+	 * @param string         $path
+	 * @param string|DOMNode $value
+	 * @param array          $attrs
+	 * @param TrueAction_Dom_Element
+	 */
+	public function setNode($path, $val = null, array $attrs = null)
+	{
+		$node = $this;
+		$pathArray = explode('/', $path);
+		$end = count($pathArray) - 1;
+		$xpath = new DOMXPath($this->ownerDocument);
+		foreach ($pathArray as $index => $nodeName) {
+			if (!$nodeName) { // skip blank/null elements
+				continue;
+			}
+			if ($index === $end) {
+				$node = $node->createChild($nodeName, $val, $attrs);
+			} else {
+				$nodeList = $xpath->query($nodeName, $node);
+				if ($nodeList->length > 0) {
+					$node = $nodeList->item(0);
+				} else {
+					$node = $node->createChild($nodeName);
+				}
+			}
+		}
+		return $node;
+	}
+
+	/**
 	 * Add an attribute as an id.
 	 *
 	 * @param string $name The name of the attribute
@@ -63,13 +93,27 @@ class TrueAction_Dom_Element extends DOMElement {
 
 	/**
 	 * Same as setAttribute except returns $this object for chaining.
-	 *
 	 * @see self::setAttribute
 	 * @return TrueAction_Dom_Element
 	 */
 	public function addAttribute($name, $val = null, $isId = false)
 	{
 		$this->setAttribute($name, $val, $isId);
+		return $this;
+	}
+
+	/**
+	 * add attributes extracted from the specified array
+	 * @param array $attrs
+	 * @return TrueAction_Dom_Element
+	 */
+	public function addAttributes(array $attrs = null)
+	{
+		if ($attrs) {
+			foreach ($attrs as $name => $value) {
+				parent::setAttribute($name, $value);
+			}
+		}
 		return $this;
 	}
 }
