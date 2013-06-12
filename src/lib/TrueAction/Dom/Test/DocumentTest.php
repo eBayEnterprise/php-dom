@@ -106,4 +106,14 @@ class TrueAction_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 		$this->assertSame($node, $doc->firstChild);
 		$this->assertSame('newfoo', $node->textContent);
 	}
+
+	/**
+	 * @expectedException DOMException
+	 */
+	public function testAddElementException()
+	{
+		$doc = new TrueAction_Dom_Document();
+		$doc->addElement('foo');
+		$doc->addElement('foo2');
+	}
 }
