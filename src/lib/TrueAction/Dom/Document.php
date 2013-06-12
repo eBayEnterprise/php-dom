@@ -22,6 +22,11 @@ class TrueAction_Dom_Document extends DOMDocument
 	 */
 	public function addElement($name, $val = null, $nsUri = '')
 	{
+		if ($this->documentElement) {
+			throw new DOMException(
+				'The specified path would cause adding a sibling to the root element.'
+			);
+		}
 		$el = $this->appendChild(new TrueAction_Dom_Element($name, '', $nsUri));
 		if (!is_null($val)) {
 			$el->appendChild(is_string($val) ? new DOMCdataSection($val) : $val);
