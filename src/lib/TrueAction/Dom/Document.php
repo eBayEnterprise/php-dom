@@ -85,8 +85,8 @@ class TrueAction_Dom_Document extends DOMDocument
 			if ($targetIsRoot) {
 				if ($this->hasChildNodes()) {
 					// is the first element in the path the root node?
-					$startNode = ($root === $this->firstChild->nodeName) ?
-						$this->firstChild : null;
+					$startNode = ($root === $this->documentElement->nodeName) ?
+						$this->documentElement : null;
 					if (!$startNode || ($startNode && !$overwrite)) {
 						// any starting point other than the root is an error.
 						// a path to the root when overwrite is false is also an error since it would
@@ -95,13 +95,13 @@ class TrueAction_Dom_Document extends DOMDocument
 							'The specified path would cause adding a sibling to the root element.'
 						);
 					}
-					$this->removeChild($this->firstChild);
+					$this->removeChild($this->documentElement);
 				}
 				$node = $this->addElement($root, $val, $nsUri)->firstChild;
 			} else {
 				if ($this->hasChildNodes()) {
-					if ($root === $this->firstChild->nodeName) {
-						$startNode = $this->firstChild;
+					if ($root === $this->documentElement->nodeName) {
+						$startNode = $this->documentElement;
 					} else {
 						throw new DOMException(
 							'The specified path would cause adding a sibling to the root element.'
