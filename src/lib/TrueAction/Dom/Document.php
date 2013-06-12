@@ -52,38 +52,51 @@ class TrueAction_Dom_Document extends DOMDocument
 	}
 
 	/**
-	 * create all nodes along a given path relative to the document.
+	 * create all nodes along a given path relative to the document. if overwrite is
+	 * specified, the new node will replace the old one.
 	 * NOTE:
 	 * The path '/' will return null and no changes will be made.
-	 * The first element in the path will be considered the root.
+	 * The first element in the path will be considered the root node.
 	 * any nodes along the path that do not exist will be created.
-	 * for any element along the path except the leaf (last) element,
-	 *  only the first matching node will be traversed if the element matches multiple siblings.
+	 * for any element along the path except the leaf (last) element, only the first
+	 * matching node will be traversed if the element matches multiple siblings.
+	 * likewise, when overwrite is true, only the first matching node will be replaced
+	 * if the final element matches multiple siblings.
 	 * @param string         $path
 	 * @param string|DOMNode $value
 	 * @param array          $attrs
 	 * @return TrueAction_Dom_Element
 	 */
-	public function setNode($path, $val = null, array $attrs = array()) {
-		$path        = ltrim($path, '/');
+	public function setNode($path, $val = null, $nsUri = '', $overwrite = false)
+	{
+		$path        = trim($path, '/');
 		$root        = substr($path, 0, strpos($path, '/'));
-		$trimmedPath = trim($path, '/');
 		$node        = null;
 		$xpath       = new DOMXPath($this);
 		if ($root) {
-			$nodeList = $xpath->query($root);
-			if ($root === $trimmedPath) {
-				$node = $this->createElement($path, $val);
-				$node->addAttributes($attrs);
-			} else {
-				$nodeList = $xpath->query($root, $this);
-				if ($nodeList->length === 0) {
-					$startNode = $this->createElement($root);
-				} else {
-					$startNode = $nodeList->item(0);
+			// is the path to the root node?
+			$targetIsRoot = (bool)$root === $path;
+			if ($targetIsRoot) {
+				$node = $this->createElement($root, $val, $nsUri);
+				if ($this->hasChildNodes()) {
+					// is the first element in the path the root node?
+					$startNode = ($root === $this->firstChild->nodeName) ?
+						$this->firstChild : null;
+					if (!$startNode || ($startNode && !$overwrite)) {
+						// any starting point other than the root is an error.
+						// a path to the root when overwrite is false is also an error since it would
+						// create a sibling to the root.
+						throw new DOMException(
+							'The specified path would cause adding a sibling to the root element.'
+						);
+					}
+					$this->replaceChild($node, $this->firstChild);
 				}
+			} else {
+				$startNode = $this->hasChildren() ?
+					$this->firstChild : $this->addElement($root);
 				$subPath = substr($path, strpos($path, '/') + 1);
-				$node = $startNode->setNode($subPath, $val, $attrs);
+				$node = $startNode->setNode($subPath, $val, null, $nsUri, $overwrite);
 			}
 		}
 		return $node;
