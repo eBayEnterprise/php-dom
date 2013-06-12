@@ -93,7 +93,7 @@ class TrueAction_Dom_Document extends DOMDocument
 					$this->replaceChild($node, $this->firstChild);
 				}
 			} else {
-				$startNode = $this->hasChildren() ?
+				$startNode = $this->hasChildNodes() ?
 					$this->firstChild : $this->addElement($root);
 				$subPath = substr($path, strpos($path, '/') + 1);
 				$node = $startNode->setNode($subPath, $val, null, $nsUri, $overwrite);
