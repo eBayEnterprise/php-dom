@@ -66,9 +66,44 @@ class TrueAction_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 		$this->assertNull($node);
 		$node = $doc->setNode('foo/bar');
 		$this->assertSame($node, $doc->firstChild->firstChild);
-		$node = $doc->setNode('bar/baz');
-		$this->assertSame($node, $doc->firstChild->nextSibling->firstChild);
+		$node2 = $doc->setNode('foo/bar');
+		$this->assertSame($node2, $doc->firstChild->firstChild->nextSibling);
+		$this->assertNotSame($node, $node2);
+	}
+
+	public function testSetNodeTrailingSlash()
+	{
+		$doc  = new TrueAction_Dom_Document();
+		$node = $doc->setNode('foo/');
+		$this->assertSame($node, $doc->firstChild);
+	}
+
+	/**
+	 * @expectedException DOMException
+	 */
+	public function testSetNodeException()
+	{
+		$doc = new TrueAction_Dom_Document();
 		$node = $doc->setNode('bar');
-		$this->assertSame($node, $doc->firstChild->nextSibling->nextSibling);
+		$node = $doc->setNode('bar');
+	}
+
+	/**
+	 * @expectedException DOMException
+	 */
+	public function testSetNodeException2()
+	{
+		$doc = new TrueAction_Dom_Document();
+		$node = $doc->setNode('bar/foo');
+		$node = $doc->setNode('biz/foo');
+	}
+
+	public function testSetNodeOverwrite()
+	{
+		$doc = new TrueAction_Dom_Document();
+		$doc->setNode('foo', 'oldfoo');
+		$node = $doc->setNode('foo', 'newfoo', '', true);
+		$this->assertSame($node, $doc->firstChild);
+		$this->assertSame('newfoo', $node->textContent);
 	}
 }

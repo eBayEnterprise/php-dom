@@ -69,15 +69,15 @@ class TrueAction_Dom_Document extends DOMDocument
 	 */
 	public function setNode($path, $val = null, $nsUri = '', $overwrite = false)
 	{
-		$path        = trim($path, '/');
-		$root        = substr($path, 0, strpos($path, '/'));
 		$node        = null;
 		$xpath       = new DOMXPath($this);
+		$path        = trim($path, '/');
+		$root        = strpos($path, '/') ? // this only ever return false or N > 0
+			substr($path, 0, strpos($path, '/')) : $path;
 		if ($root) {
 			// is the path to the root node?
-			$targetIsRoot = (bool)$root === $path;
+			$targetIsRoot = ($root === $path);
 			if ($targetIsRoot) {
-				$node = $this->createElement($root, $val, $nsUri);
 				if ($this->hasChildNodes()) {
 					// is the first element in the path the root node?
 					$startNode = ($root === $this->firstChild->nodeName) ?
@@ -90,11 +90,21 @@ class TrueAction_Dom_Document extends DOMDocument
 							'The specified path would cause adding a sibling to the root element.'
 						);
 					}
-					$this->replaceChild($node, $this->firstChild);
+					$this->removeChild($this->firstChild);
 				}
+				$node = $this->addElement($root, $val, $nsUri)->firstChild;
 			} else {
-				$startNode = $this->hasChildNodes() ?
-					$this->firstChild : $this->addElement($root);
+				if ($this->hasChildNodes()) {
+					if ($root === $this->firstChild->nodeName) {
+						$startNode = $this->firstChild;
+					} else {
+						throw new DOMException(
+							'The specified path would cause adding a sibling to the root element.'
+						);
+					}
+				} else {
+					$startNode = $this->addElement($root)->firstChild;
+				}
 				$subPath = substr($path, strpos($path, '/') + 1);
 				$node = $startNode->setNode($subPath, $val, null, $nsUri, $overwrite);
 			}
