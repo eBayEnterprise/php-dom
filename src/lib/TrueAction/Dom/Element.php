@@ -36,15 +36,20 @@ class TrueAction_Dom_Element extends DOMElement {
 
 	/**
 	 * create all nodes along a given path relative to the current node.
-	 * any nodes along the path that do not exist will be created.
-	 * NOTE: for any element along the path except the leaf (last) element,
-	 *  only the first matching node will be traversed if the element matches multiple siblings.
+	 * any nodes along the path that do not exist will be created. if the final node
+	 * exists and overwrite is true, the node will be replaced; otherwise a new node
+	 * is created and appended.
+	 * NOTE:
+	 *  for any element along the path except the leaf (last) element, only the first
+	 *  matching node will be traversed if the element matches multiple siblings.
+	 *  likewise, when overwrite is true, only the first matching node will be replaced
+	 *  if the final element matches multiple siblings.
 	 * @param string         $path
 	 * @param string|DOMNode $value
 	 * @param array          $attrs
 	 * @param TrueAction_Dom_Element
 	 */
-	public function setNode($path, $val = null, array $attrs = null)
+	public function setNode($path, $val = null, array $attrs = null, $nsUri = '', $overwrite = false)
 	{
 		$node = $this;
 		$pathArray = explode('/', $path);
@@ -54,15 +59,22 @@ class TrueAction_Dom_Element extends DOMElement {
 			if (!$nodeName) { // skip blank/null elements
 				continue;
 			}
-			if ($index === $end) {
-				$node = $node->createChild($nodeName, $val, $attrs);
-			} else {
-				$nodeList = $xpath->query($nodeName, $node);
-				if ($nodeList->length > 0) {
-					$node = $nodeList->item(0);
+			$nodeList = $xpath->query($nodeName, $node);
+			if ($nodeList->length > 0) {
+				if ($index === $end) {
+					// if the node exists and is the target, replace it if overwrite
+					// is specified.
+					if ($overwrite) {
+						$oldNode = $node->removeChild($nodeList->item(0));
+					}
+					$node = $node->createChild($nodeName, $val, $attrs, $nsUri);
 				} else {
-					$node = $node->createChild($nodeName);
+					$node = $nodeList->item(0);
 				}
+			} else {
+				$node = ($index === $end) ?
+					$node->createChild($nodeName, $val, $attrs, $nsUri) :
+					$node->createChild($nodeName);
 			}
 		}
 		return $node;

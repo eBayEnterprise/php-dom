@@ -149,6 +149,26 @@ class TrueAction_Dom_Test_ElementTest extends PHPUnit_Framework_TestCase
 			'a val',
 			$this->root->firstChild->firstChild->firstChild->nextSibling->nextSibling->getAttribute('a')
 		);
+		$node = $this->root->setNode('foo3/');
+		$this->assertSame($node, $this->root->firstChild->nextSibling->nextSibling);
+	}
+
+	/**
+	 * @test
+	 */
+	public function testSetNodeOverwrite()
+	{
+		$node = $this->root->setNode('foo');
+		$foo  = $this->root->setNode('foo', 'someval', null, '', true);
+		$this->assertSame($this->root->firstChild->textContent, 'someval');
+
+		$node = $this->root->setNode('foo/bar', '', null, '', true);
+		$this->assertSame($foo, $this->root->firstChild);
+		$this->assertSame($node, $this->root->firstChild->firstChild->nextSibling);
+
+		$bar  = $this->root->setNode('foo/bar', 'somesecondval', null, '', true);
+		$this->assertSame($bar, $this->root->firstChild->firstChild->nextSibling);
+		$this->assertNotSame($node, $bar);
 	}
 
 	/**
