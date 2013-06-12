@@ -1,6 +1,8 @@
 <?php
 class TrueAction_Dom_Document extends DOMDocument
 {
+	private static $multiRootNodeExceptionMsg = 'The specified path would cause adding a sibling to the root element.';
+
 	public function __construct($version = null, $encoding = null)
 	{
 		parent::__construct($version, $encoding);
@@ -23,9 +25,7 @@ class TrueAction_Dom_Document extends DOMDocument
 	public function addElement($name, $val = null, $nsUri = '')
 	{
 		if ($this->documentElement) {
-			throw new DOMException(
-				'The specified path would cause adding a sibling to the root element.'
-			);
+			throw new DOMException(self::$multiRootNodeExceptionMsg);
 		}
 		$el = $this->appendChild(new TrueAction_Dom_Element($name, '', $nsUri));
 		if (!is_null($val)) {
@@ -91,9 +91,7 @@ class TrueAction_Dom_Document extends DOMDocument
 						// any starting point other than the root is an error.
 						// a path to the root when overwrite is false is also an error since it would
 						// create a sibling to the root.
-						throw new DOMException(
-							'The specified path would cause adding a sibling to the root element.'
-						);
+						throw new DOMException(self::$multiRootNodeExceptionMsg);
 					}
 					$this->removeChild($this->documentElement);
 				}
@@ -103,9 +101,7 @@ class TrueAction_Dom_Document extends DOMDocument
 					if ($root === $this->documentElement->nodeName) {
 						$startNode = $this->documentElement;
 					} else {
-						throw new DOMException(
-							'The specified path would cause adding a sibling to the root element.'
-						);
+						throw new DOMException(self::$multiRootNodeExceptionMsg);
 					}
 				} else {
 					$startNode = $this->addElement($root)->firstChild;
