@@ -71,6 +71,7 @@ class TrueAction_Dom_Element extends DOMElement {
 						);
 						$node->insertBefore($newNode, $oldNode);
 						$node->removeChild($oldNode);
+						$node = $newNode;
 					} else {
 						$node = $node->createChild($nodeName, $val, $attrs, $nsUri);
 					}
