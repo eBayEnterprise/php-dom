@@ -65,9 +65,15 @@ class TrueAction_Dom_Element extends DOMElement {
 					// if the node exists and is the target, replace it if overwrite
 					// is specified.
 					if ($overwrite) {
-						$oldNode = $node->removeChild($nodeList->item(0));
+						$oldNode = $nodeList->item(0);
+						$newNode = $node->ownerDocument->createElement(
+							$nodeName, $val, $attrs, $nsUri
+						);
+						$node->insertBefore($newNode, $oldNode);
+						$node->removeChild($oldNode);
+					} else {
+						$node = $node->createChild($nodeName, $val, $attrs, $nsUri);
 					}
-					$node = $node->createChild($nodeName, $val, $attrs, $nsUri);
 				} else {
 					$node = $nodeList->item(0);
 				}
