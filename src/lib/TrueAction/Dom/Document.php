@@ -29,7 +29,7 @@ class TrueAction_Dom_Document extends DOMDocument
 		}
 		$el = $this->appendChild(new TrueAction_Dom_Element($name, '', $nsUri));
 		if (!is_null($val)) {
-			$el->appendChild(is_string($val) ? new DOMCdataSection($val) : $val);
+			$el->appendChild(TrueAction_Dom_Helper::coerceValue($val));
 		}
 
 		return $this;
@@ -47,7 +47,7 @@ class TrueAction_Dom_Document extends DOMDocument
 		// Append the new element in order to append its child.
 		$el = $this->appendChild(new TrueAction_Dom_Element($name, '', $nsUri));
 		if (!is_null($val)) {
-			$el->appendChild(is_string($val) ? new DOMCdataSection($val) : $val);
+			$el->appendChild(TrueAction_Dom_Helper::coerceValue($val));
 			// Then remove the new element because we didn't really want
 			// to attach it.
 			$this->removeChild($el);

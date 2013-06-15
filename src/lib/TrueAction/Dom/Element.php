@@ -29,7 +29,7 @@ class TrueAction_Dom_Element extends DOMElement {
 		$el = $this->appendChild(new TrueAction_Dom_Element($name, '', $nsUri));
 		$el->addAttributes($attrs);
 		if (!is_null($val)) {
-			$el->appendChild(is_string($val) ? new DOMCdataSection($val) : $val);
+			$el->appendChild(TrueAction_Dom_Helper::coerceValue($val));
 		}
 		return $el;
 	}
