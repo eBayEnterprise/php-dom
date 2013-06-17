@@ -188,4 +188,11 @@ class TrueAction_Dom_Test_ElementTest extends PHPUnit_Framework_TestCase
 		$this->assertSame('biz', $this->root->getAttribute('_1234'));
 		$this->assertSame('234', $this->root->getAttribute('id'));
 	}
+
+	public function testValueCoersion()
+	{
+		$this->root->createChild('number', 4);
+		$this->root->createChild('object', array());
+		$this->root->createChild('node', new DOMElement('thenode'));
+	}
 }
