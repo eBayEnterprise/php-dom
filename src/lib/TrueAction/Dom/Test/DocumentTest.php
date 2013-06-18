@@ -1,6 +1,5 @@
 <?php
 require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Document.php';
-require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Element.php';
 
 class TrueAction_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 {
