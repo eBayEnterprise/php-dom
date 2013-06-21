@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'Element.php';
+
 class TrueAction_Dom_Document extends DOMDocument
 {
 	private static $multiRootNodeExceptionMsg = 'The specified path would cause adding a sibling to the root element.';

@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'Helper.php';
+
 class TrueAction_Dom_Element extends DOMElement
 {
 	public $cascadeDefaultNamespace = true;
