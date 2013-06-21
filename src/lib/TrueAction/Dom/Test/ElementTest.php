@@ -195,4 +195,15 @@ class TrueAction_Dom_Test_ElementTest extends PHPUnit_Framework_TestCase
 		$this->root->createChild('object', array());
 		$this->root->createChild('node', new DOMElement('thenode'));
 	}
+
+	public function testDefaultNs()
+	{
+		$nsUri = 'http://api.gsicommerce.com/schema/checkout/1.0';
+		$p   = $this->root->createChild('p', '', null, $nsUri);
+		$pc  = $p->createChild('pc');
+		$pc->cascadeDefaultNamespace = false;
+		$pcc = $pc->createChild('pcc');
+		$this->assertSame($p->namespaceURI, $pc->namespaceURI);
+		$this->assertNotSame($pc->namespaceURI, $pcc->namespaceURI);
+	}
 }

@@ -1,5 +1,8 @@
 <?php
-class TrueAction_Dom_Element extends DOMElement {
+class TrueAction_Dom_Element extends DOMElement
+{
+	public $cascadeDefaultNamespace = true;
+
 	/**
 	 * create a child node and return the parent.
 	 * @param string         $name
@@ -7,7 +10,7 @@ class TrueAction_Dom_Element extends DOMElement {
 	 * @param array          $attrs
 	 * @return TrueAction_Dom_Element
 	 */
-	public function addChild($name, $val = null, array $attrs = null, $nsUri = '')
+	public function addChild($name, $val = null, array $attrs = null, $nsUri = null)
 	{
 		$this->createChild($name, $val, $attrs, $nsUri);
 		return $this;
@@ -24,8 +27,10 @@ class TrueAction_Dom_Element extends DOMElement {
 	 * @example $tde->createChild('xyzzy', $ex1) -> "<xyzzy><foo fizzy='wizzy'>bar</foo></xyzzy>"
 	 * @return TrueAction_Dom_Element the created TrueAction_Dom_Element
 	 */
-	public function createChild($name, $val = null, array $attrs = null, $nsUri = '')
+	public function createChild($name, $val = null, array $attrs = null, $nsUri = null)
 	{
+		$nsUri = ($this->cascadeDefaultNamespace && is_null($nsUri)) ?
+			$this->namespaceURI : $nsUri;
 		$el = $this->appendChild(new TrueAction_Dom_Element($name, '', $nsUri));
 		$el->addAttributes($attrs);
 		if (!is_null($val)) {
