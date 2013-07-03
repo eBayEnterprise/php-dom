@@ -153,4 +153,37 @@ class TrueAction_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 			$doc->saveXML()
 		);
 	}
+
+	/**
+	 * Testing multi-byte UTF-8 contents in Dom elements, using  addElement
+	 *
+	 * @test
+	 */
+	public function testMultiByteUtf8AddElement()
+	{
+		$doc = new TrueAction_Dom_Document('1.0', 'UTF-16');
+		$data = mb_convert_encoding('This is a multi-byte UTF-8 test', "UTF-8");
+		$doc->addElement('root', $data, 'http://api.gsicommerce.com/schema/checkout/1.0');
+		$this->assertNotEmpty(
+			$doc->saveXML()
+		);
+	}
+
+	/**
+	 * Testing multi-byte UTF-8 contents in Dom elements, using load
+	 *
+	 * @test
+	 */
+	public function testMultiByteUtf8WithLoadXml()
+	{
+		$doc = new TrueAction_Dom_Document('1.0', 'UTF-8');
+		$data = '<root xmlns="http://api.gsicommerce.com/schema/checkout/1.0">' .
+			mb_convert_encoding('This is a multi-byte UTF-8 test', "UTF-8") .
+			'</root>';
+		$doc->loadXML($data);
+
+		$this->assertNotEmpty(
+			$doc->saveXML()
+		);
+	}
 }
