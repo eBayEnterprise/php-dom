@@ -188,13 +188,31 @@ class TrueAction_Dom_Test_ElementTest extends PHPUnit_Framework_TestCase
 		$this->assertSame('234', $this->root->getAttribute('id'));
 	}
 
+	/**
+	 * @test
+	 */
 	public function testValueCoersion()
 	{
 		$this->root->createChild('number', 4);
-		$this->root->createChild('object', array());
 		$this->root->createChild('node', new DOMElement('thenode'));
 	}
 
+	/**
+	 * Testing helper coerce method, it will throw exception when array is pass to it.
+	 *
+	 * @test
+	 * @expectedException Exception
+	 */
+	public function testValueCoersioWithException()
+	{
+		$this->assertNotEmpty(
+			$this->root->createChild('object', array())
+		);
+	}
+
+	/**
+	 * @test
+	 */
 	public function testDefaultNs()
 	{
 		$nsUri = 'http://api.gsicommerce.com/schema/checkout/1.0';

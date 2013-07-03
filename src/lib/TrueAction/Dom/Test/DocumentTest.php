@@ -118,4 +118,39 @@ class TrueAction_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 		$doc->addElement('foo');
 		$doc->addElement('foo2');
 	}
+
+	/**
+	 * Testing UTF 16 double bytes contents on Dom xml, using addElement
+	 *
+	 * @test
+	 * @expectedException Exception
+	 */
+	public function testUtf16WithAddElement()
+	{
+		$doc = new TrueAction_Dom_Document('1.0', 'UTF-16');
+		$data = "\xFE\xFF\x00\x3C\x00\x66\x00\x6F\x00\x6F\x00\x2F\x00\x3E";
+		$doc->addElement('root', $data, 'http://api.gsicommerce.com/schema/checkout/1.0');
+		$this->assertNotEmpty(
+			$doc->saveXML()
+		);
+	}
+
+	/**
+	 * Testing UTF 16 double bytes contents on Dom xml, using loadXML
+	 *
+	 * @test
+	 * @expectedException Exception
+	 */
+	public function testUtf16WithLoadXml()
+	{
+		$doc = new TrueAction_Dom_Document('1.0', 'UTF-16');
+		$data = '<root xmlns="http://api.gsicommerce.com/schema/checkout/1.0">' .
+			"\xFE\xFF\x00\x3C\x00\x66\x00\x6F\x00\x6F\x00\x2F\x00\x3E" .
+			'</root>';
+		$doc->loadXML($data);
+
+		$this->assertNotEmpty(
+			$doc->saveXML()
+		);
+	}
 }
