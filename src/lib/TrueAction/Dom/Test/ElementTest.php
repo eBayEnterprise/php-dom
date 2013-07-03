@@ -201,7 +201,6 @@ class TrueAction_Dom_Test_ElementTest extends PHPUnit_Framework_TestCase
 	 * Testing helper coerce method, it will throw exception when array is pass to it.
 	 *
 	 * @test
-	 * @expectedException Exception
 	 */
 	public function testValueCoersioWithException()
 	{
