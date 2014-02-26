@@ -57,59 +57,95 @@ class TrueAction_Dom_Document extends DOMDocument
 	}
 
 	/**
-	 * create all nodes along a given path relative to the document. if overwrite is
-	 * specified, the new node will replace the old one.
-	 * NOTE:
-	 * The path '/' will return null and no changes will be made.
-	 * The first element in the path will be considered the root node.
-	 * any nodes along the path that do not exist will be created.
-	 * for any element along the path except the leaf (last) element, only the first
-	 * matching node will be traversed if the element matches multiple siblings.
-	 * likewise, when overwrite is true, only the first matching node will be replaced
-	 * if the final element matches multiple siblings.
-	 * @param string         $path
-	 * @param string|DOMNode $value
-	 * @param array          $attrs
-	 * @return TrueAction_Dom_Element
+	 * Create a new DOMElement at the location specified by the given path. This
+	 * method will create any elements that do not exist leading up to the path.
+	 * The last element specified by the path will always result in a new
+	 * DOMElement, creating a new sibling if a node at the last part of the
+	 * path already exists. If a value is given, it will be set as the value of
+	 * the last element created.
+	 *
+	 * The "$path" value supports a very limited subset of XPath syntax. The path
+	 * must unambiguously describe a single destination node. Attribute name/value
+	 * pairs can be specified using standard XPath syntax.
+	 *
+	 * @example
+	 * Given the following path:
+	 * CustomAttributes/Attribute[@name="Description"][@xml:lang="en-us"]
+	 * This DOM structure would be created and added starting at the given context node
+	 * <CustomAttributes><Attribute name="Description" xml:lang="en-us" /></CustomAttributes>
+	 *
+	 * @param string         $path        Path pointing to the node to be created.
+	 * @param string|DOMNode $value       Value the created node should be set to
+	 * @param DOMNode        $contextNode Nodes added/created relative to this DOMNode, defaults to the document.
+	 * @param string         $nsUri       If given, any nodes created will have a namespaceURI set to this value
+	 * @return TrueAction_Dom_Element The last element specified in the path
 	 */
-	public function setNode($path, $val = null, $nsUri = '', $overwrite = false)
+	public function setNode($path, $value=null, DOMNode $contextNode=null, $nsUri='')
 	{
-		$node        = null;
-		$xpath       = new DOMXPath($this);
-		$path        = trim($path, '/');
-		$root        = strpos($path, '/') ? // this only ever return false or N > 0
-			substr($path, 0, strpos($path, '/')) : $path;
-		if ($root) {
-			// is the path to the root node?
-			$targetIsRoot = ($root === $path);
-			if ($targetIsRoot) {
-				if ($this->hasChildNodes()) {
-					// is the first element in the path the root node?
-					$startNode = ($root === $this->documentElement->nodeName) ?
-						$this->documentElement : null;
-					if (!$startNode || ($startNode && !$overwrite)) {
-						// any starting point other than the root is an error.
-						// a path to the root when overwrite is false is also an error since it would
-						// create a sibling to the root.
-						throw new DOMException(self::$multiRootNodeExceptionMsg);
-					}
-					$this->removeChild($this->documentElement);
-				}
-				$node = $this->addElement($root, $val, $nsUri)->firstChild;
-			} else {
-				if ($this->hasChildNodes()) {
-					if ($root === $this->documentElement->nodeName) {
-						$startNode = $this->documentElement;
-					} else {
-						throw new DOMException(self::$multiRootNodeExceptionMsg);
-					}
-				} else {
-					$startNode = $this->addElement($root)->firstChild;
-				}
-				$subPath = substr($path, strpos($path, '/') + 1);
-				$node = $startNode->setNode($subPath, $val, null, $nsUri, $overwrite);
+		if (!$path) {
+			if ($value && $contextNode) {
+				$contextNode->appendChild(TrueAction_Dom_Helper::coerceValue($value));
 			}
+			return $contextNode;
 		}
-		return $node;
+
+		$parts = explode('/', $path, 2);
+		$current = array_shift($parts);
+		$rest = array_shift($parts);
+
+		// When current is empty, the path began with a '/'. Set the context node
+		// to the document ($this) and move on to the rest of the path
+		if (!$current) {
+			return $this->setNode($rest, $value, $this, $nsUri);
+		}
+
+		$contextNode = $contextNode ?: $this;
+		$xpath = new DOMXPath($this);
+		$nextNode = $xpath->query($current, $contextNode)->item(0);
+		// if the next node doesn't exist, or we're at the end of the path,
+		// create a new node from and add append it.
+		if (!$nextNode || !$rest) {
+			$nextNode = $this->_addNodeForPath($current, $contextNode, $nsUri);
+		}
+		return $this->setNode($rest, $value, $nextNode, $nsUri);
+	}
+	/**
+	 * Given a single piece of a supported XPath and a context DOMNode, create a
+	 * new DOMElement from the XPath, returning the newly created node.
+	 * @param string  $pathSection A single node section in a supported path. @see self::setNode for details on supported paths
+	 * @param DOMNode $parentNode  Node the created node should be appended to
+	 * @param string  $nsUriA      Namespace URI of the created node
+	 * @return DOMElement          The element created
+	 * @throws DOMException If adding the node would result in a DOMDocument with multiple root nodes
+	 */
+	protected function _addNodeForPath($pathSection, DOMNode $parentNode, $nsUri='')
+	{
+		if ($parentNode === $this && $this->documentElement) {
+			throw new DOMException(self::$multiRootNodeExceptionMsg);
+		}
+		list($nodeName, $attributes) = $this->_parsePathSection($pathSection);
+		$nextNode = $this->createElement($nodeName, null, $nsUri);
+		$parentNode->appendChild($nextNode);
+		$nextNode->addAttributes($attributes);
+		return $nextNode;
+	}
+
+	/**
+	 * Break a section of supported XPath into an array containing the node name
+	 * and an array of attributes
+	 * @param  string $pathSection
+	 * @return array
+	 */
+	protected function _parsePathSection($pathSection)
+	{
+		$pattern = '/([^\[]+)(?:\[@([^=]+)="([^"]+)")/';
+		$matches = array();
+		preg_match_all($pattern, $pathSection, $matches);
+		return array(
+			$matches[1] ? $matches[1][0] : $pathSection,
+			$matches[2] && $matches[3] ?
+				array_combine($matches[2], $matches[3]) :
+				array()
+		);
 	}
 }

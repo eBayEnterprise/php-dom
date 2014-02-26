@@ -40,7 +40,17 @@ class TrueAction_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 			trim($doc->saveXML())
 		);
 	}
-
+	/**
+	 * Attemtping to add multiple root nodes should throw an exception.
+	 * @test
+	 */
+	public function testAddElementException()
+	{
+		$this->setExpectedException('DOMException', 'The specified path would cause adding a sibling to the root element.');
+		$dom = new TrueAction_Dom_Document();
+		$dom->addElement('root');
+		$dom->addElement('secondRoot');
+	}
 	/**
 	 * @test
 	 */
@@ -63,14 +73,32 @@ class TrueAction_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 	{
 		$doc = new TrueAction_Dom_Document();
 		$node = $doc->setNode('/');
-		$this->assertNull($node);
+		$this->assertSame($doc, $node);
 		$node = $doc->setNode('');
 		$this->assertNull($node);
 		$node = $doc->setNode('foo/bar');
 		$this->assertSame($node, $doc->firstChild->firstChild);
+		$this->assertSame('<foo><bar></bar></foo>', $doc->C14N());
 		$node2 = $doc->setNode('foo/bar');
 		$this->assertSame($node2, $doc->firstChild->firstChild->nextSibling);
+		$this->assertSame('<foo><bar></bar><bar></bar></foo>', $doc->C14N());
 		$this->assertNotSame($node, $node2);
+	}
+
+	public function testSetNodeAbsolutePath()
+	{
+		$doc = new TrueAction_Dom_Document();
+		$doc->loadXML('<foo><bar></bar></foo>');
+		$doc->setNode('/foo/bar/baz');
+		$this->assertSame('<foo><bar><baz></baz></bar></foo>', $doc->C14N());
+	}
+
+	public function testSetNodeAbsolutePathWithContext()
+	{
+		$doc = new TrueAction_Dom_Document();
+		$doc->loadXML('<foo><bar></bar></foo>');
+		$doc->setNode('/foo/bar/baz', null, $doc->documentElement->firstChild);
+		$this->assertSame('<foo><bar><baz></baz></bar></foo>', $doc->C14N());
 	}
 
 	public function testSetNodeTrailingSlash()
@@ -100,25 +128,124 @@ class TrueAction_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 		$node = $doc->setNode('biz/foo');
 	}
 
-	public function testSetNodeOverwrite()
+	/**
+	 * Attributes in the path should result in attributes being added to the
+	 * node.
+	 * @test
+	 */
+	public function testSetNodeCreateAttributes()
 	{
 		$doc = new TrueAction_Dom_Document();
-		$doc->setNode('foo', 'oldfoo');
-		$node = $doc->setNode('foo', 'newfoo', '', true);
-		$this->assertSame($node, $doc->firstChild);
-		$this->assertSame('newfoo', $node->textContent);
+		$doc->setNode('foo[@name="bar"][@type="baz"]');
+		$this->assertSame('<foo name="bar" type="baz"></foo>', $doc->C14N());
 	}
 
 	/**
-	 * @expectedException DOMException
+	 * Ensure the value of the last node created is set to the given value
+	 * @test
 	 */
-	public function testAddElementException()
+	public function testSettingNodeValue()
 	{
 		$doc = new TrueAction_Dom_Document();
-		$doc->addElement('foo');
-		$doc->addElement('foo2');
+		$doc->setNode('foo', 'bar');
+		$this->assertSame('<foo>bar</foo>', $doc->C14N());
+	}
+	/**
+	 * When using a context node, the created nodes should be relative to
+	 * that node
+	 * @test
+	 */
+	public function testUsingContextNode()
+	{
+		$doc = new TrueAction_Dom_Document();
+		$doc->loadXML('<root><foo></foo></root>');
+		$doc->setNode('bar', null, $doc->documentElement->firstChild);
+
+		$this->assertSame(
+			'<root><foo><bar></bar></foo></root>',
+			$doc->C14N()
+		);
 	}
 
+	/**
+	 * Should be able to set the value of the created node to a DOMNode.
+	 * @test
+	 */
+	public function testValueOfDomNode()
+	{
+		$doc = new TrueAction_Dom_Document();
+		$doc->setNode('foo', $doc->createElement('bar'));
+		$this->assertSame(
+			'<foo><bar></bar></foo>',
+			$doc->C14N()
+		);
+	}
+	/**
+	 * Ensure the namespace uri of the created element is set
+	 * @test
+	 */
+	public function testUsingNsUri()
+	{
+		$doc = new TrueAction_Dom_Document();
+		$doc->setNode('foo', null, null, 'http://ns.uri');
+		$this->assertSame('http://ns.uri', $doc->documentElement->namespaceURI);
+	}
+	/**
+	 * The namespace uri should only be added to nodes that are created from
+	 * the setNode call.
+	 * @test
+	 */
+	public function testUsingNsUriMultipleNodes()
+	{
+		$doc = new TrueAction_Dom_Document();
+		$doc->loadXML('<foo/>');
+		$doc->setNode('foo/bar', null, null, 'http://ns.uri');
+		$this->assertNotSame('http://ns.uri', $doc->documentElement->namespaceURI);
+		$this->assertSame('http://ns.uri', $doc->documentElement->firstChild->namespaceURI);
+	}
+	/**
+	 * All nodes created by setNode should get the namespace uri set.
+	 * @test
+	 */
+	public function testUsingNsUriMultipleCreatedNodes()
+	{
+		$doc = new TrueAction_Dom_Document();
+		$doc->setNode('foo/bar', null, null, 'http://ns.uri');
+		$this->assertSame('http://ns.uri', $doc->documentElement->namespaceURI);
+		$this->assertSame('http://ns.uri', $doc->documentElement->firstChild->namespaceURI);
+	}
+	/**
+	 * Break a single part of a supported XPath down into an array containing the
+	 * node name and an array of attributes to add to the node.
+	 * @test
+	 */
+	public function testParsePathSection()
+	{
+		$dom = new TrueAction_Dom_Document();
+		$reflectionMethod = new ReflectionMethod($dom, '_parsePathSection');
+		$reflectionMethod->setAccessible(true);
+
+		$this->assertSame(
+			array('nodeName', array('attrOne' => 'one', 'attrTwo' => 'two')),
+			$reflectionMethod->invoke($dom, 'nodeName[@attrOne="one"][@attrTwo="two"]')
+		);
+	}
+	/**
+	 * When the path section only consists of a node name, should return an
+	 * empty array for attributes.
+	 * @test
+	 */
+	public function testParsePathSectionNodeNameOnly()
+	{
+		$dom = new TrueAction_Dom_Document();
+		$reflectionMethod = new ReflectionMethod($dom, '_parsePathSection');
+		$reflectionMethod->setAccessible(true);
+
+		$this->assertSame(
+			array('nodeName', array()),
+			$reflectionMethod->invoke($dom, 'nodeName')
+		);
+	}
 	/**
 	 * Testing UTF 16 double bytes contents on Dom xml, using addElement
 	 *

@@ -121,56 +121,39 @@ class TrueAction_Dom_Test_ElementTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Method should pass through to the owner document's setNode, using itself
+	 * as the context node.
 	 * @test
 	 */
 	public function testSetNode()
 	{
-		$node = $this->root->setNode('foo');
-		$this->assertSame($this->root->firstChild, $node);
-		$node = $this->root->setNode('foo/bar/baz');
-		$this->assertSame($node, $this->root->firstChild->firstChild->firstChild);
-		$this->root->createChild('foo');
-		$this->assertSame('foo', $this->root->firstChild->nextSibling->nodeName);
-		$node = $this->root->setNode('foo/bar/biz');
-		$this->assertSame($node, $this->root->firstChild->firstChild->firstChild->nextSibling);
-		$this->assertSame('biz', $this->root->firstChild->firstChild->firstChild->nextSibling->nodeName);
-		$node = $this->root->setNode('foo/bar/biz', 'bizval', array('a' => 'a val'));
-		$this->assertSame(
-			'biz',
-			$this->root->firstChild->firstChild->firstChild->nextSibling->nextSibling->nodeName
-		);
-		$this->assertNotSame(
-			$this->root->firstChild->firstChild->firstChild->nextSibling,
-			$this->root->firstChild->firstChild->firstChild->nextSibling->nextSibling
-		);
-		$this->assertSame(
-			'bizval',
-			$this->root->firstChild->firstChild->firstChild->nextSibling->nextSibling->textContent
-		);
-		$this->assertSame(
-			'a val',
-			$this->root->firstChild->firstChild->firstChild->nextSibling->nextSibling->getAttribute('a')
-		);
-		$node = $this->root->setNode('foo3/');
-		$this->assertSame($node, $this->root->firstChild->nextSibling->nextSibling);
-	}
+		$doc = $this->getMockBuilder('TrueAction_Dom_Document')
+			->setMethods(array('setNode'))
+			->getMock();
 
-	/**
-	 * @test
-	 */
-	public function testSetNodeOverwrite()
-	{
-		$node = $this->root->setNode('foo');
-		$foo  = $this->root->setNode('foo', 'someval', null, '', true);
-		$this->assertSame($this->root->firstChild->textContent, 'someval');
+		$doc->addElement('testNode');
+		$node = $doc->documentElement;
 
-		$node = $this->root->setNode('foo/bar', '', null, '', true);
-		$this->assertSame($foo, $this->root->firstChild);
-		$this->assertSame($node, $this->root->firstChild->firstChild->nextSibling);
+		$createdNode = $this->getMockBuilder('TrueAction_Dom_Element')
+			->disableOriginalConstructor()
+			->setMethods(null)
+			->getMock();
 
-		$bar  = $this->root->setNode('foo/bar', 'somesecondval', null, '', true);
-		$this->assertSame($bar, $this->root->firstChild->firstChild->nextSibling);
-		$this->assertNotSame($node, $bar);
+		$path = 'Some/Path';
+		$val = 'Value';
+		$nsUri = 'http://ns.uri';
+
+		$doc->expects($this->once())
+			->method('setNode')
+			->with(
+				$this->identicalTo($path),
+				$this->identicalTo($val),
+				$this->identicalTo($node),
+				$this->identicalTo($nsUri)
+			)
+			->will($this->returnValue($createdNode));
+
+		$this->assertSame($createdNode, $node->setNode($path, $val, $nsUri));
 	}
 
 	/**
@@ -186,15 +169,6 @@ class TrueAction_Dom_Test_ElementTest extends PHPUnit_Framework_TestCase
 		$this->assertSame('baz', $this->root->getAttribute('foo'));
 		$this->assertSame('biz', $this->root->getAttribute('_1234'));
 		$this->assertSame('234', $this->root->getAttribute('id'));
-	}
-
-	/**
-	 * @test
-	 */
-	public function testValueCoersion()
-	{
-		$this->root->createChild('number', 4);
-		$this->root->createChild('node', new DOMElement('thenode'));
 	}
 
 	/**
