@@ -88,8 +88,13 @@ class TrueAction_Dom_Document extends DOMDocument
 			}
 			return $contextNode;
 		}
-
-		$parts = explode('/', $path, 2);
+		// Split on any '/' character that isn't wrapped in double quotes
+		// e.g. '/' not proceeded by an even number of '"' characters
+		// Regex have some caveats for "simplicity" sake: doesn't understand
+		// single quotes or escaped quote characters. If we need much more complex
+		// matching that this, something more robust and less cryptic should be
+		// implemented to actually parse the XPath expression.
+		$parts = preg_split('/[\/](?=([^"]*"[^"]*")*[^"]*$)/', $path, 2);
 		$current = array_shift($parts);
 		$rest = array_shift($parts);
 

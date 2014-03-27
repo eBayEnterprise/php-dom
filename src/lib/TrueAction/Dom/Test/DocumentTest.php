@@ -130,14 +130,14 @@ class TrueAction_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * Attributes in the path should result in attributes being added to the
-	 * node.
+	 * node. Also ensures that quoted '/'s are not used to split the XPath
 	 * @test
 	 */
 	public function testSetNodeCreateAttributes()
 	{
 		$doc = new TrueAction_Dom_Document();
-		$doc->setNode('foo[@name="bar"][@type="baz"]');
-		$this->assertSame('<foo name="bar" type="baz"></foo>', $doc->C14N());
+		$doc->setNode('foo[@name="bar"][@href="http://example.com/"]/baz');
+		$this->assertSame('<foo href="http://example.com/" name="bar"><baz></baz></foo>', $doc->C14N());
 	}
 
 	/**
