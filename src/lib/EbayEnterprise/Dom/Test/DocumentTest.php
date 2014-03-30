@@ -1,19 +1,19 @@
 <?php
 require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Document.php';
 
-class TrueAction_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
+class EbayEnterprise_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 {
 	/**
 	 * @test
 	 */
 	public function testUsage()
 	{
-		$doc = new TrueAction_Dom_Document();
+		$doc = new EbayEnterprise_Dom_Document();
 		$root = $doc->appendChild(
 			$doc->createElement('testroot')
 		);
 		$this->assertSame(
-			'TrueAction_Dom_Element',
+			'EbayEnterprise_Dom_Element',
 			get_class($root)
 		);
 		$this->assertTrue(
@@ -30,7 +30,7 @@ class TrueAction_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testAddElementWithNs()
 	{
-		$doc = new TrueAction_Dom_Document('1.0', 'UTF-8');
+		$doc = new EbayEnterprise_Dom_Document('1.0', 'UTF-8');
 		$expected = '<?xml version="1.0" encoding="UTF-8"?>
 <root xmlns="http://api.gsicommerce.com/schema/checkout/1.0"><![CDATA[test with addElement method]]></root>';
 
@@ -47,7 +47,7 @@ class TrueAction_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 	public function testAddElementException()
 	{
 		$this->setExpectedException('DOMException', 'The specified path would cause adding a sibling to the root element.');
-		$dom = new TrueAction_Dom_Document();
+		$dom = new EbayEnterprise_Dom_Document();
 		$dom->addElement('root');
 		$dom->addElement('secondRoot');
 	}
@@ -56,7 +56,7 @@ class TrueAction_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testCreateElementWithNs()
 	{
-		$doc = new TrueAction_Dom_Document('1.0', 'UTF-8');
+		$doc = new EbayEnterprise_Dom_Document('1.0', 'UTF-8');
 		$expected = '<?xml version="1.0" encoding="UTF-8"?>
 <root xmlns="http://api.gsicommerce.com/schema/checkout/1.0"><![CDATA[test with CreateElement method]]></root>';
 
@@ -71,7 +71,7 @@ class TrueAction_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 
 	public function testSetNode()
 	{
-		$doc = new TrueAction_Dom_Document();
+		$doc = new EbayEnterprise_Dom_Document();
 		$node = $doc->setNode('/');
 		$this->assertSame($doc, $node);
 		$node = $doc->setNode('');
@@ -87,7 +87,7 @@ class TrueAction_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 
 	public function testSetNodeAbsolutePath()
 	{
-		$doc = new TrueAction_Dom_Document();
+		$doc = new EbayEnterprise_Dom_Document();
 		$doc->loadXML('<foo><bar></bar></foo>');
 		$doc->setNode('/foo/bar/baz');
 		$this->assertSame('<foo><bar><baz></baz></bar></foo>', $doc->C14N());
@@ -95,7 +95,7 @@ class TrueAction_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 
 	public function testSetNodeAbsolutePathWithContext()
 	{
-		$doc = new TrueAction_Dom_Document();
+		$doc = new EbayEnterprise_Dom_Document();
 		$doc->loadXML('<foo><bar></bar></foo>');
 		$doc->setNode('/foo/bar/baz', null, $doc->documentElement->firstChild);
 		$this->assertSame('<foo><bar><baz></baz></bar></foo>', $doc->C14N());
@@ -103,7 +103,7 @@ class TrueAction_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 
 	public function testSetNodeTrailingSlash()
 	{
-		$doc  = new TrueAction_Dom_Document();
+		$doc  = new EbayEnterprise_Dom_Document();
 		$node = $doc->setNode('foo/');
 		$this->assertSame($node, $doc->firstChild);
 	}
@@ -113,7 +113,7 @@ class TrueAction_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testSetNodeException()
 	{
-		$doc = new TrueAction_Dom_Document();
+		$doc = new EbayEnterprise_Dom_Document();
 		$node = $doc->setNode('bar');
 		$node = $doc->setNode('bar');
 	}
@@ -123,7 +123,7 @@ class TrueAction_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testSetNodeException2()
 	{
-		$doc = new TrueAction_Dom_Document();
+		$doc = new EbayEnterprise_Dom_Document();
 		$node = $doc->setNode('bar/foo');
 		$node = $doc->setNode('biz/foo');
 	}
@@ -135,7 +135,7 @@ class TrueAction_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testSetNodeCreateAttributes()
 	{
-		$doc = new TrueAction_Dom_Document();
+		$doc = new EbayEnterprise_Dom_Document();
 		$doc->setNode('foo[@name="bar"][@href="http://example.com/"]/baz');
 		$this->assertSame('<foo href="http://example.com/" name="bar"><baz></baz></foo>', $doc->C14N());
 	}
@@ -146,7 +146,7 @@ class TrueAction_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testSettingNodeValue()
 	{
-		$doc = new TrueAction_Dom_Document();
+		$doc = new EbayEnterprise_Dom_Document();
 		$doc->setNode('foo', 'bar');
 		$this->assertSame('<foo>bar</foo>', $doc->C14N());
 	}
@@ -157,7 +157,7 @@ class TrueAction_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testUsingContextNode()
 	{
-		$doc = new TrueAction_Dom_Document();
+		$doc = new EbayEnterprise_Dom_Document();
 		$doc->loadXML('<root><foo></foo></root>');
 		$doc->setNode('bar', null, $doc->documentElement->firstChild);
 
@@ -173,7 +173,7 @@ class TrueAction_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testValueOfDomNode()
 	{
-		$doc = new TrueAction_Dom_Document();
+		$doc = new EbayEnterprise_Dom_Document();
 		$doc->setNode('foo', $doc->createElement('bar'));
 		$this->assertSame(
 			'<foo><bar></bar></foo>',
@@ -186,7 +186,7 @@ class TrueAction_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testUsingNsUri()
 	{
-		$doc = new TrueAction_Dom_Document();
+		$doc = new EbayEnterprise_Dom_Document();
 		$doc->setNode('foo', null, null, 'http://ns.uri');
 		$this->assertSame('http://ns.uri', $doc->documentElement->namespaceURI);
 	}
@@ -197,7 +197,7 @@ class TrueAction_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testUsingNsUriMultipleNodes()
 	{
-		$doc = new TrueAction_Dom_Document();
+		$doc = new EbayEnterprise_Dom_Document();
 		$doc->loadXML('<foo/>');
 		$doc->setNode('foo/bar', null, null, 'http://ns.uri');
 		$this->assertNotSame('http://ns.uri', $doc->documentElement->namespaceURI);
@@ -209,7 +209,7 @@ class TrueAction_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testUsingNsUriMultipleCreatedNodes()
 	{
-		$doc = new TrueAction_Dom_Document();
+		$doc = new EbayEnterprise_Dom_Document();
 		$doc->setNode('foo/bar', null, null, 'http://ns.uri');
 		$this->assertSame('http://ns.uri', $doc->documentElement->namespaceURI);
 		$this->assertSame('http://ns.uri', $doc->documentElement->firstChild->namespaceURI);
@@ -221,7 +221,7 @@ class TrueAction_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testParsePathSection()
 	{
-		$dom = new TrueAction_Dom_Document();
+		$dom = new EbayEnterprise_Dom_Document();
 		$reflectionMethod = new ReflectionMethod($dom, '_parsePathSection');
 		$reflectionMethod->setAccessible(true);
 
@@ -237,7 +237,7 @@ class TrueAction_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testParsePathSectionNodeNameOnly()
 	{
-		$dom = new TrueAction_Dom_Document();
+		$dom = new EbayEnterprise_Dom_Document();
 		$reflectionMethod = new ReflectionMethod($dom, '_parsePathSection');
 		$reflectionMethod->setAccessible(true);
 
@@ -254,7 +254,7 @@ class TrueAction_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testUtf16WithAddElement()
 	{
-		$doc = new TrueAction_Dom_Document('1.0', 'UTF-16');
+		$doc = new EbayEnterprise_Dom_Document('1.0', 'UTF-16');
 		$data = "\xFE\xFF\x00\x3C\x00\x66\x00\x6F\x00\x6F\x00\x2F\x00\x3E";
 		$doc->addElement('root', $data, 'http://api.gsicommerce.com/schema/checkout/1.0');
 		$this->assertNotEmpty(
@@ -270,7 +270,7 @@ class TrueAction_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testUtf16WithLoadXml()
 	{
-		$doc = new TrueAction_Dom_Document('1.0', 'UTF-16');
+		$doc = new EbayEnterprise_Dom_Document('1.0', 'UTF-16');
 		$data = '<root xmlns="http://api.gsicommerce.com/schema/checkout/1.0">' .
 			"\xFE\xFF\x00\x3C\x00\x66\x00\x6F\x00\x6F\x00\x2F\x00\x3E" .
 			'</root>';
@@ -288,7 +288,7 @@ class TrueAction_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testMultiByteUtf8AddElement()
 	{
-		$doc = new TrueAction_Dom_Document('1.0', 'UTF-16');
+		$doc = new EbayEnterprise_Dom_Document('1.0', 'UTF-16');
 		$data = mb_convert_encoding('This is a multi-byte UTF-8 test', "UTF-8");
 		$doc->addElement('root', $data, 'http://api.gsicommerce.com/schema/checkout/1.0');
 		$this->assertNotEmpty(
@@ -303,7 +303,7 @@ class TrueAction_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testMultiByteUtf8WithLoadXml()
 	{
-		$doc = new TrueAction_Dom_Document('1.0', 'UTF-8');
+		$doc = new EbayEnterprise_Dom_Document('1.0', 'UTF-8');
 		$data = '<root xmlns="http://api.gsicommerce.com/schema/checkout/1.0">' .
 			mb_convert_encoding('This is a multi-byte UTF-8 test', "UTF-8") .
 			'</root>';

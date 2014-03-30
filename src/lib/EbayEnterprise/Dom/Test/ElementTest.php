@@ -1,11 +1,11 @@
 <?php
 require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Document.php';
 
-class TrueAction_Dom_Test_ElementTest extends PHPUnit_Framework_TestCase
+class EbayEnterprise_Dom_Test_ElementTest extends PHPUnit_Framework_TestCase
 {
 	public function setUp()
 	{
-		$this->doc = new TrueAction_Dom_Document();
+		$this->doc = new EbayEnterprise_Dom_Document();
 		$this->root = $this->doc->appendChild(
 			$this->doc->createElement('testroot')
 		);
@@ -127,14 +127,14 @@ class TrueAction_Dom_Test_ElementTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testSetNode()
 	{
-		$doc = $this->getMockBuilder('TrueAction_Dom_Document')
+		$doc = $this->getMockBuilder('EbayEnterprise_Dom_Document')
 			->setMethods(array('setNode'))
 			->getMock();
 
 		$doc->addElement('testNode');
 		$node = $doc->documentElement;
 
-		$createdNode = $this->getMockBuilder('TrueAction_Dom_Element')
+		$createdNode = $this->getMockBuilder('EbayEnterprise_Dom_Element')
 			->disableOriginalConstructor()
 			->setMethods(null)
 			->getMock();

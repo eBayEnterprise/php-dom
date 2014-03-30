@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'Helper.php';
 
-class TrueAction_Dom_Element extends DOMElement
+class EbayEnterprise_Dom_Element extends DOMElement
 {
 	public $cascadeDefaultNamespace = true;
 
@@ -10,7 +10,7 @@ class TrueAction_Dom_Element extends DOMElement
 	 * @param string         $name
 	 * @param string|DOMNode $val
 	 * @param array          $attrs
-	 * @return TrueAction_Dom_Element
+	 * @return EbayEnterprise_Dom_Element
 	 */
 	public function addChild($name, $val = null, array $attrs = null, $nsUri = null)
 	{
@@ -27,16 +27,16 @@ class TrueAction_Dom_Element extends DOMElement
 	 * @param string $nsUri The ns attribute uri for the element
 	 * @example $ex1 = $tde->createChild('foo', 'bar', array('fizzy'=>'wizzy')) -> "<foo fizzy='wizzy'>bar</foo>"
 	 * @example $tde->createChild('xyzzy', $ex1) -> "<xyzzy><foo fizzy='wizzy'>bar</foo></xyzzy>"
-	 * @return TrueAction_Dom_Element the created TrueAction_Dom_Element
+	 * @return EbayEnterprise_Dom_Element the created EbayEnterprise_Dom_Element
 	 */
 	public function createChild($name, $val = null, array $attrs = null, $nsUri = null)
 	{
 		$nsUri = ($this->cascadeDefaultNamespace && is_null($nsUri)) ?
 			$this->namespaceURI : $nsUri;
-		$el = $this->appendChild(new TrueAction_Dom_Element($name, '', $nsUri));
+		$el = $this->appendChild(new EbayEnterprise_Dom_Element($name, '', $nsUri));
 		$el->addAttributes($attrs);
 		if (!is_null($val)) {
-			$el->appendChild(TrueAction_Dom_Helper::coerceValue($val));
+			$el->appendChild(EbayEnterprise_Dom_Helper::coerceValue($val));
 		}
 		return $el;
 	}
@@ -44,7 +44,7 @@ class TrueAction_Dom_Element extends DOMElement
 	/**
 	 * Create a new DOMElement at the path specified. The path should be relative
 	 * to the DOMElement this is called on.
-	 * @see TrueAction_Dom_Document::setNode
+	 * @see EbayEnterprise_Dom_Document::setNode
 	 * @param string         $path
 	 * @param string|DOMNode $value
 	 * @param string         $nsUri
@@ -60,7 +60,7 @@ class TrueAction_Dom_Element extends DOMElement
 	 * @param string $name The name of the attribute
 	 * @param string $val The value of the attribute
 	 * @param boolean $isId if true, the attribute is an id (even if its name isn't "id").
-	 * @param TrueAction_Dom_Element
+	 * @param EbayEnterprise_Dom_Element
 	 * @return DOMAttr
 	 */
 	public function setAttribute($name, $val = null, $isId = false)
@@ -73,7 +73,7 @@ class TrueAction_Dom_Element extends DOMElement
 	/**
 	 * Same as setAttribute except returns $this object for chaining.
 	 * @see self::setAttribute
-	 * @return TrueAction_Dom_Element
+	 * @return EbayEnterprise_Dom_Element
 	 */
 	public function addAttribute($name, $val = null, $isId = false)
 	{
@@ -84,7 +84,7 @@ class TrueAction_Dom_Element extends DOMElement
 	/**
 	 * add attributes extracted from the specified array
 	 * @param array $attrs
-	 * @return TrueAction_Dom_Element
+	 * @return EbayEnterprise_Dom_Element
 	 */
 	public function addAttributes(array $attrs = null)
 	{

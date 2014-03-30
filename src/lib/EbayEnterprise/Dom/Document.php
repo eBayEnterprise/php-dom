@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'Element.php';
 
-class TrueAction_Dom_Document extends DOMDocument
+class EbayEnterprise_Dom_Document extends DOMDocument
 {
 	private static $multiRootNodeExceptionMsg = 'The specified path would cause adding a sibling to the root element.';
 
@@ -10,28 +10,28 @@ class TrueAction_Dom_Document extends DOMDocument
 		parent::__construct($version, $encoding);
 		$this->registerNodeClass(
 			'DOMElement',
-			'TrueAction_Dom_Element'
+			'EbayEnterprise_Dom_Element'
 		);
 	}
 
 	/**
-	 * Create and attach a TrueAction_Dom_Element node with the
+	 * Create and attach a EbayEnterprise_Dom_Element node with the
 	 * specified name and value.
 	 *
 	 * @param string $name The node name for the element to be created
 	 * @param string|DOMNode $val A CDATA string or node to be appended
 	 *        to the created node
 	 * @param string $nsUri The ns attribute uri for the element
-	 * @return TrueAction_Dom_Document This document
+	 * @return EbayEnterprise_Dom_Document This document
 	 */
 	public function addElement($name, $val = null, $nsUri = '')
 	{
 		if ($this->documentElement) {
 			throw new DOMException(self::$multiRootNodeExceptionMsg);
 		}
-		$el = $this->appendChild(new TrueAction_Dom_Element($name, '', $nsUri));
+		$el = $this->appendChild(new EbayEnterprise_Dom_Element($name, '', $nsUri));
 		if (!is_null($val)) {
-			$el->appendChild(TrueAction_Dom_Helper::coerceValue($val));
+			$el->appendChild(EbayEnterprise_Dom_Helper::coerceValue($val));
 		}
 		return $this;
 	}
@@ -41,16 +41,16 @@ class TrueAction_Dom_Document extends DOMDocument
 	 * the created element without attaching it.
 	 *
 	 * @see self::addElement
-	 * @return TrueAction_Dom_Element The created node.
+	 * @return EbayEnterprise_Dom_Element The created node.
 	 */
 	public function createElement($name, $val = null, $nsUri = '')
 	{
-		$el = new TrueAction_Dom_Element($name, '', $nsUri);
+		$el = new EbayEnterprise_Dom_Element($name, '', $nsUri);
 		if (!is_null($val)) {
 			// Append the new element in order to append its child.
 			$fragment = $this->createDocumentFragment();
 			$fragment->appendChild($el);
-			$el->appendChild(TrueAction_Dom_Helper::coerceValue($val));
+			$el->appendChild(EbayEnterprise_Dom_Helper::coerceValue($val));
 			$fragment->removeChild($el);
 		}
 		return $el;
@@ -78,13 +78,13 @@ class TrueAction_Dom_Document extends DOMDocument
 	 * @param string|DOMNode $value       Value the created node should be set to
 	 * @param DOMNode        $contextNode Nodes added/created relative to this DOMNode, defaults to the document.
 	 * @param string         $nsUri       If given, any nodes created will have a namespaceURI set to this value
-	 * @return TrueAction_Dom_Element The last element specified in the path
+	 * @return EbayEnterprise_Dom_Element The last element specified in the path
 	 */
 	public function setNode($path, $value=null, DOMNode $contextNode=null, $nsUri='')
 	{
 		if (!$path) {
 			if ($value && $contextNode) {
-				$contextNode->appendChild(TrueAction_Dom_Helper::coerceValue($value));
+				$contextNode->appendChild(EbayEnterprise_Dom_Helper::coerceValue($value));
 			}
 			return $contextNode;
 		}

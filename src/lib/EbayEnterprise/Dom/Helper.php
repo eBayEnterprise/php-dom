@@ -1,5 +1,5 @@
 <?php
-class TrueAction_Dom_Helper
+class EbayEnterprise_Dom_Helper
 {
 	public static function coerceValue($value)
 	{
