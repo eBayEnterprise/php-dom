@@ -106,6 +106,10 @@ class EbayEnterprise_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 		$doc  = new EbayEnterprise_Dom_Document();
 		$node = $doc->setNode('foo/');
 		$this->assertSame($node, $doc->firstChild);
+
+		/* These should be the same - trail / means 'reuse existing': */
+		$node = $doc->setNode('foo/');
+		$this->assertSame($node, $doc->firstChild);
 	}
 
 	/**

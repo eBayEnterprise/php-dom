@@ -107,9 +107,15 @@ class EbayEnterprise_Dom_Document extends DOMDocument
 		$contextNode = $contextNode ?: $this;
 		$xpath = new DOMXPath($this);
 		$nextNode = $xpath->query($current, $contextNode)->item(0);
+
+		// If the path given ends with a '/', then add to an already-existing node.
+		// If the node doesn't exist, create it.
+		// If the path does not end in '/', multiple nodes with the same name are created.
+		$reuseNode = (substr($path,-1) == '/') ? true : false;
+
 		// if the next node doesn't exist, or we're at the end of the path,
 		// create a new node from and add append it.
-		if (!$nextNode || !$rest) {
+		if (!$nextNode || (!$reuseNode && !$rest)) {
 			$nextNode = $this->_addNodeForPath($current, $contextNode, $nsUri);
 		}
 		return $this->setNode($rest, $value, $nextNode, $nsUri);
