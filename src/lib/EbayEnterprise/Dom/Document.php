@@ -93,8 +93,8 @@ class EbayEnterprise_Dom_Document extends DOMDocument
 		// When current is empty, the path began with a '/'. Set the context node
 		// to the document ($this) and move on to the rest of the path
 		// otherwise build new nodes
-		return !$splitPath['current']?
-			$this->setNode($splitPath['rest'], $value, $this, $nsUri):
+		return !$splitPath['current'] ?
+			$this->setNode($splitPath['rest'], $value, $this, $nsUri) :
 			$this->_setNewNode($path, $value, $contextNode, $nsUri, $splitPath);
 	}
 	/**
@@ -106,14 +106,21 @@ class EbayEnterprise_Dom_Document extends DOMDocument
 	 * implemented to actually parse the XPath expression.
 	 * @param string $path
 	 * @return array
-	 *         Example: array(
-	 *            'current' => 'something',
-	 *            'rest' => 'rest of something'
-	 *         )
+	 * @example
+	 * <code>
+	 * <?php
+	 * $path = 'CustomAttributes/Attribute[@name="Description"][@xml:lang="en-us"]';
+	 * $this->_splitPath($path);
+	 * array(
+	 *   'current' => 'CustomAttributes',
+	 *   'rest' => 'Attribute[@name="Description"][@xml:lang="en-us"]'
+	 * )
+	 * ?>
+	 * </code>
 	 */
 	protected function _splitPath($path)
 	{
-		$parts = preg_split('/[\/](?=([^"]*"[^"]*")*[^"]*$)/', $path, 2);
+		$parts = preg_split('#[\/](?=([^"]*"[^"]*")*[^"]*$)#', $path, 2);
 		return array('current' => array_shift($parts), 'rest' => array_shift($parts));
 	}
 	/**
@@ -134,7 +141,7 @@ class EbayEnterprise_Dom_Document extends DOMDocument
 		// If the path given ends with a '/', then add to an already-existing node.
 		// If the node doesn't exist, create it.
 		// If the path does not end in '/', multiple nodes with the same name are created.
-		$reuseNode = (substr($path, -1) == '/') ? true : false;
+		$reuseNode = (substr($path, -1) === '/');
 
 		// if the next node doesn't exist, or we're at the end of the path,
 		// create a new node from and add append it.
@@ -146,7 +153,8 @@ class EbayEnterprise_Dom_Document extends DOMDocument
 	/**
 	 * Given a single piece of a supported XPath and a context DOMNode, create a
 	 * new DOMElement from the XPath, returning the newly created node.
-	 * @param string  $pathSection A single node section in a supported path. @see self::setNode for details on supported paths
+	 * @param string  $pathSection A single node section in a supported path.
+	 * @see self::setNode for details on supported paths
 	 * @param DOMNode $parentNode  Node the created node should be appended to
 	 * @param string  $nsUriA      Namespace URI of the created node
 	 * @return DOMElement          The element created
