@@ -3,9 +3,9 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'Element.php';
 
 class EbayEnterprise_Dom_Document extends DOMDocument
 {
-	private static $multiRootNodeExceptionMsg = 'The specified path would cause adding a sibling to the root element.';
+	private static $_multiRootNodeExceptionMsg = 'The specified path would cause adding a sibling to the root element.';
 
-	public function __construct($version = null, $encoding = null)
+	public function __construct($version=null, $encoding=null)
 	{
 		parent::__construct($version, $encoding);
 		$this->registerNodeClass(
@@ -24,10 +24,10 @@ class EbayEnterprise_Dom_Document extends DOMDocument
 	 * @param string $nsUri The ns attribute uri for the element
 	 * @return EbayEnterprise_Dom_Document This document
 	 */
-	public function addElement($name, $val = null, $nsUri = '')
+	public function addElement($name, $val=null, $nsUri='')
 	{
 		if ($this->documentElement) {
-			throw new DOMException(self::$multiRootNodeExceptionMsg);
+			throw new DOMException(self::$_multiRootNodeExceptionMsg);
 		}
 		$el = $this->appendChild(new EbayEnterprise_Dom_Element($name, '', $nsUri));
 		if (!is_null($val)) {
@@ -43,7 +43,7 @@ class EbayEnterprise_Dom_Document extends DOMDocument
 	 * @see self::addElement
 	 * @return EbayEnterprise_Dom_Element The created node.
 	 */
-	public function createElement($name, $val = null, $nsUri = '')
+	public function createElement($name, $val=null, $nsUri='')
 	{
 		$el = new EbayEnterprise_Dom_Element($name, '', $nsUri);
 		if (!is_null($val)) {
@@ -155,7 +155,7 @@ class EbayEnterprise_Dom_Document extends DOMDocument
 	protected function _addNodeForPath($pathSection, DOMNode $parentNode, $nsUri='')
 	{
 		if ($parentNode === $this && $this->documentElement) {
-			throw new DOMException(self::$multiRootNodeExceptionMsg);
+			throw new DOMException(self::$_multiRootNodeExceptionMsg);
 		}
 		list($nodeName, $attributes) = $this->_parsePathSection($pathSection);
 		$nextNode = $this->createElement($nodeName, null, $nsUri);
@@ -177,9 +177,7 @@ class EbayEnterprise_Dom_Document extends DOMDocument
 		preg_match_all($pattern, $pathSection, $matches);
 		return array(
 			$matches[1] ? $matches[1][0] : $pathSection,
-			$matches[2] && $matches[3] ?
-				array_combine($matches[2], $matches[3]) :
-				array()
+			$matches[2] && $matches[3] ? array_combine($matches[2], $matches[3]) : array()
 		);
 	}
 }

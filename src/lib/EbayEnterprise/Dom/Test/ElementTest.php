@@ -19,7 +19,7 @@ class EbayEnterprise_Dom_Test_ElementTest extends PHPUnit_Framework_TestCase
 		$child = $this->root->createChild(
 			'testchild',
 			'testval',
-			array('ref'=>'1', 'foo'=>'baz', '_1234'=>'biz', 'id'=>'234')
+			array('ref' => '1', 'foo' => 'baz', '_1234' => 'biz', 'id' => '234')
 		);
 		$this->assertSame('testchild', $child->nodeName);
 		$this->assertSame('testval', $child->nodeValue);
@@ -36,27 +36,26 @@ class EbayEnterprise_Dom_Test_ElementTest extends PHPUnit_Framework_TestCase
 		$node = $this->root->addChild(
 			'testchild',
 			'testval',
-			array('ref'=>'1', 'foo'=>'baz', '_1234'=>'biz', 'id'=>'234')
+			array('ref' => '1', 'foo' => 'baz', '_1234' => 'biz', 'id' => '234')
 		);
 		$this->assertSame($this->root, $node);
 	}
-
 
 	/**
 	 * @test
 	 */
 	public function testCreateChildSpecialChars()
 	{
-		$child1 = $this->root->createChild(
+		$childA = $this->root->createChild(
 			'child1',
 			'test<val'
 		);
-		$this->assertSame('test<val', $child1->textContent);
-		$child2 = $this->root->createChild(
+		$this->assertSame('test<val', $childA->textContent);
+		$childB = $this->root->createChild(
 			'child2',
 			'test&val'
 		);
-		$this->assertSame('test&val', $child2->textContent);
+		$this->assertSame('test&val', $childB->textContent);
 	}
 
 	/**
@@ -68,7 +67,6 @@ class EbayEnterprise_Dom_Test_ElementTest extends PHPUnit_Framework_TestCase
 		$this->assertSame('foooo', $child->nodeName);
 		$this->assertSame('this is a test', $child->textContent);
 	}
-
 
 	/**
 	 * @test
@@ -109,7 +107,7 @@ class EbayEnterprise_Dom_Test_ElementTest extends PHPUnit_Framework_TestCase
 		$this->root->createChild(
 			'childElement',
 			'test element addChild method',
-			array('ref'=>'1'),
+			array('ref' => '1'),
 			'http://api.gsicommerce.com/schema/checkout/1.0'
 		);
 		$expected = '<?xml version=""?>
@@ -162,7 +160,7 @@ class EbayEnterprise_Dom_Test_ElementTest extends PHPUnit_Framework_TestCase
 	public function testAddAttributes()
 	{
 		$node = $this->root->addAttributes(
-			array('ref'=>'1', 'foo'=>'baz', '_1234'=>'biz', 'id'=>'234')
+			array('ref' => '1', 'foo' => 'baz', '_1234' => 'biz', 'id' => '234')
 		);
 		$this->assertSame($this->root, $node);
 		$this->assertSame('1', $this->root->getAttribute('ref'));

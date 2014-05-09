@@ -12,7 +12,7 @@ class EbayEnterprise_Dom_Element extends DOMElement
 	 * @param array          $attrs
 	 * @return EbayEnterprise_Dom_Element
 	 */
-	public function addChild($name, $val = null, array $attrs = null, $nsUri = null)
+	public function addChild($name, $val=null, array $attrs=null, $nsUri=null)
 	{
 		$this->createChild($name, $val, $attrs, $nsUri);
 		return $this;
@@ -29,7 +29,7 @@ class EbayEnterprise_Dom_Element extends DOMElement
 	 * @example $tde->createChild('xyzzy', $ex1) -> "<xyzzy><foo fizzy='wizzy'>bar</foo></xyzzy>"
 	 * @return EbayEnterprise_Dom_Element the created EbayEnterprise_Dom_Element
 	 */
-	public function createChild($name, $val = null, array $attrs = null, $nsUri = null)
+	public function createChild($name, $val=null, array $attrs=null, $nsUri=null)
 	{
 		$nsUri = ($this->cascadeDefaultNamespace && is_null($nsUri)) ?
 			$this->namespaceURI : $nsUri;
@@ -49,7 +49,7 @@ class EbayEnterprise_Dom_Element extends DOMElement
 	 * @param string|DOMNode $value
 	 * @param string         $nsUri
 	 */
-	public function setNode($path, $val=null, $nsUri = '')
+	public function setNode($path, $val=null, $nsUri='')
 	{
 		return $this->ownerDocument->setNode($path, $val, $this, $nsUri);
 	}
@@ -63,7 +63,7 @@ class EbayEnterprise_Dom_Element extends DOMElement
 	 * @param EbayEnterprise_Dom_Element
 	 * @return DOMAttr
 	 */
-	public function setAttribute($name, $val = null, $isId = false)
+	public function setAttribute($name, $val=null, $isId=false)
 	{
 		$attr = parent::setAttribute($name, $val);
 		$this->setIdAttribute($name, $isId);
@@ -75,7 +75,7 @@ class EbayEnterprise_Dom_Element extends DOMElement
 	 * @see self::setAttribute
 	 * @return EbayEnterprise_Dom_Element
 	 */
-	public function addAttribute($name, $val = null, $isId = false)
+	public function addAttribute($name, $val=null, $isId=false)
 	{
 		$this->setAttribute($name, $val, $isId);
 		return $this;
@@ -86,7 +86,7 @@ class EbayEnterprise_Dom_Element extends DOMElement
 	 * @param array $attrs
 	 * @return EbayEnterprise_Dom_Element
 	 */
-	public function addAttributes(array $attrs = null)
+	public function addAttributes(array $attrs=null)
 	{
 		if ($attrs) {
 			foreach ($attrs as $name => $value) {

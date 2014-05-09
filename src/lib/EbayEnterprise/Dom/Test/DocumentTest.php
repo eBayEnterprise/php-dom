@@ -79,10 +79,10 @@ class EbayEnterprise_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 		$node = $doc->setNode('foo/bar');
 		$this->assertSame($node, $doc->firstChild->firstChild);
 		$this->assertSame('<foo><bar></bar></foo>', $doc->C14N());
-		$node2 = $doc->setNode('foo/bar');
-		$this->assertSame($node2, $doc->firstChild->firstChild->nextSibling);
+		$nodeB = $doc->setNode('foo/bar');
+		$this->assertSame($nodeB, $doc->firstChild->firstChild->nextSibling);
 		$this->assertSame('<foo><bar></bar><bar></bar></foo>', $doc->C14N());
-		$this->assertNotSame($node, $node2);
+		$this->assertNotSame($node, $nodeB);
 	}
 
 	public function testSetNodeAbsolutePath()
@@ -293,7 +293,7 @@ class EbayEnterprise_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 	public function testMultiByteUtf8AddElement()
 	{
 		$doc = new EbayEnterprise_Dom_Document('1.0', 'UTF-16');
-		$data = mb_convert_encoding('This is a multi-byte UTF-8 test', "UTF-8");
+		$data = mb_convert_encoding('This is a multi-byte UTF-8 test', 'UTF-8');
 		$doc->addElement('root', $data, 'http://api.gsicommerce.com/schema/checkout/1.0');
 		$this->assertNotEmpty(
 			$doc->saveXML()
@@ -309,7 +309,7 @@ class EbayEnterprise_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 	{
 		$doc = new EbayEnterprise_Dom_Document('1.0', 'UTF-8');
 		$data = '<root xmlns="http://api.gsicommerce.com/schema/checkout/1.0">' .
-			mb_convert_encoding('This is a multi-byte UTF-8 test', "UTF-8") .
+			mb_convert_encoding('This is a multi-byte UTF-8 test', 'UTF-8') .
 			'</root>';
 		$doc->loadXML($data);
 
