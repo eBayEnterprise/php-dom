@@ -88,37 +88,60 @@ class EbayEnterprise_Dom_Document extends DOMDocument
 			}
 			return $contextNode;
 		}
-		// Split on any '/' character that isn't wrapped in double quotes
-		// e.g. '/' not proceeded by an even number of '"' characters
-		// Regex have some caveats for "simplicity" sake: doesn't understand
-		// single quotes or escaped quote characters. If we need much more complex
-		// matching that this, something more robust and less cryptic should be
-		// implemented to actually parse the XPath expression.
-		$parts = preg_split('/[\/](?=([^"]*"[^"]*")*[^"]*$)/', $path, 2);
-		$current = array_shift($parts);
-		$rest = array_shift($parts);
+		$splitPath = $this->_splitPath($path);
 
 		// When current is empty, the path began with a '/'. Set the context node
 		// to the document ($this) and move on to the rest of the path
-		if (!$current) {
-			return $this->setNode($rest, $value, $this, $nsUri);
-		}
-
+		// otherwise build new nodes
+		return !$splitPath['current']?
+			$this->setNode($splitPath['rest'], $value, $this, $nsUri):
+			$this->_setNewNode($path, $value, $contextNode, $nsUri, $splitPath);
+	}
+	/**
+	 * Split on any '/' character that isn't wrapped in double quotes
+	 * e.g. '/' not proceeded by an even number of '"' characters
+	 * Regex have some caveats for "simplicity" sake: doesn't understand
+	 * single quotes or escaped quote characters. If we need much more complex
+	 * matching that this, something more robust and less cryptic should be
+	 * implemented to actually parse the XPath expression.
+	 * @param string $path
+	 * @return array
+	 *         Example: array(
+	 *            'current' => 'something',
+	 *            'rest' => 'rest of something'
+	 *         )
+	 */
+	protected function _splitPath($path)
+	{
+		$parts = preg_split('/[\/](?=([^"]*"[^"]*")*[^"]*$)/', $path, 2);
+		return array('current' => array_shift($parts), 'rest' => array_shift($parts));
+	}
+	/**
+	 * set new nodes base on the passed in path string end symbol.
+	 * @param string $path
+	 * @param string|DOMNode $value
+	 * @param DOMNode $contextNode
+	 * @param string $nsUri
+	 * @param array $splitPath
+	 * @return EbayEnterprise_Dom_Element
+	 */
+	protected function _setNewNode($path, $value=null, DOMNode $contextNode=null, $nsUri='', array $splitPath)
+	{
 		$contextNode = $contextNode ?: $this;
 		$xpath = new DOMXPath($this);
-		$nextNode = $xpath->query($current, $contextNode)->item(0);
+		$nextNode = $xpath->query($splitPath['current'], $contextNode)->item(0);
 
 		// If the path given ends with a '/', then add to an already-existing node.
 		// If the node doesn't exist, create it.
 		// If the path does not end in '/', multiple nodes with the same name are created.
-		$reuseNode = (substr($path,-1) == '/') ? true : false;
+		$reuseNode = (substr($path, -1) == '/') ? true : false;
 
 		// if the next node doesn't exist, or we're at the end of the path,
 		// create a new node from and add append it.
-		if (!$nextNode || (!$reuseNode && !$rest)) {
-			$nextNode = $this->_addNodeForPath($current, $contextNode, $nsUri);
+		if (!$nextNode || (!$reuseNode && !$splitPath['rest'])) {
+			$nextNode = $this->_addNodeForPath($splitPath['current'], $contextNode, $nsUri);
 		}
-		return $this->setNode($rest, $value, $nextNode, $nsUri);
+		return $this->setNode($splitPath['rest'], $value, $nextNode, $nsUri);
 	}
 	/**
 	 * Given a single piece of a supported XPath and a context DOMNode, create a
