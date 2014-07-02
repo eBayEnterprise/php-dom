@@ -18,7 +18,6 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Docum
 class EbayEnterprise_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 {
 	/**
-	 * @test
 	 */
 	public function testUsage()
 	{
@@ -40,7 +39,6 @@ class EbayEnterprise_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @test
 	 */
 	public function testAddElementWithNs()
 	{
@@ -56,7 +54,6 @@ class EbayEnterprise_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 	}
 	/**
 	 * Attemtping to add multiple root nodes should throw an exception.
-	 * @test
 	 */
 	public function testAddElementException()
 	{
@@ -66,7 +63,6 @@ class EbayEnterprise_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 		$dom->addElement('secondRoot');
 	}
 	/**
-	 * @test
 	 */
 	public function testCreateElementWithNs()
 	{
@@ -149,7 +145,6 @@ class EbayEnterprise_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Attributes in the path should result in attributes being added to the
 	 * node. Also ensures that quoted '/'s are not used to split the XPath
-	 * @test
 	 */
 	public function testSetNodeCreateAttributes()
 	{
@@ -160,7 +155,6 @@ class EbayEnterprise_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * Ensure the value of the last node created is set to the given value
-	 * @test
 	 */
 	public function testSettingNodeValue()
 	{
@@ -171,7 +165,6 @@ class EbayEnterprise_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 	/**
 	 * When using a context node, the created nodes should be relative to
 	 * that node
-	 * @test
 	 */
 	public function testUsingContextNode()
 	{
@@ -187,7 +180,6 @@ class EbayEnterprise_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * Should be able to set the value of the created node to a DOMNode.
-	 * @test
 	 */
 	public function testValueOfDomNode()
 	{
@@ -200,7 +192,6 @@ class EbayEnterprise_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 	}
 	/**
 	 * Ensure the namespace uri of the created element is set
-	 * @test
 	 */
 	public function testUsingNsUri()
 	{
@@ -211,7 +202,6 @@ class EbayEnterprise_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 	/**
 	 * The namespace uri should only be added to nodes that are created from
 	 * the setNode call.
-	 * @test
 	 */
 	public function testUsingNsUriMultipleNodes()
 	{
@@ -223,7 +213,6 @@ class EbayEnterprise_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 	}
 	/**
 	 * All nodes created by setNode should get the namespace uri set.
-	 * @test
 	 */
 	public function testUsingNsUriMultipleCreatedNodes()
 	{
@@ -235,7 +224,6 @@ class EbayEnterprise_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Break a single part of a supported XPath down into an array containing the
 	 * node name and an array of attributes to add to the node.
-	 * @test
 	 */
 	public function testParsePathSection()
 	{
@@ -251,7 +239,6 @@ class EbayEnterprise_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 	/**
 	 * When the path section only consists of a node name, should return an
 	 * empty array for attributes.
-	 * @test
 	 */
 	public function testParsePathSectionNodeNameOnly()
 	{
@@ -267,7 +254,6 @@ class EbayEnterprise_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Testing UTF 16 double bytes contents on Dom xml, using addElement
 	 *
-	 * @test
 	 * @expectedException Exception
 	 */
 	public function testUtf16WithAddElement()
@@ -283,7 +269,6 @@ class EbayEnterprise_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Testing UTF 16 double bytes contents on Dom xml, using loadXML
 	 *
-	 * @test
 	 * @expectedException Exception
 	 */
 	public function testUtf16WithLoadXml()
@@ -302,7 +287,6 @@ class EbayEnterprise_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Testing multi-byte UTF-8 contents in Dom elements, using  addElement
 	 *
-	 * @test
 	 */
 	public function testMultiByteUtf8AddElement()
 	{
@@ -317,7 +301,6 @@ class EbayEnterprise_Dom_Test_DocumentTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Testing multi-byte UTF-8 contents in Dom elements, using load
 	 *
-	 * @test
 	 */
 	public function testMultiByteUtf8WithLoadXml()
 	{

@@ -26,7 +26,6 @@ class EbayEnterprise_Dom_Test_ElementTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @test
 	 */
 	public function testCreateChild()
 	{
@@ -43,7 +42,6 @@ class EbayEnterprise_Dom_Test_ElementTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @test
 	 */
 	public function testAddChild()
 	{
@@ -56,7 +54,6 @@ class EbayEnterprise_Dom_Test_ElementTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @test
 	 */
 	public function testCreateChildSpecialChars()
 	{
@@ -73,7 +70,6 @@ class EbayEnterprise_Dom_Test_ElementTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @test
 	 */
 	public function testCreateChildDomNode()
 	{
@@ -83,7 +79,6 @@ class EbayEnterprise_Dom_Test_ElementTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @test
 	 */
 	public function testCreateChildNoOptionals()
 	{
@@ -92,7 +87,6 @@ class EbayEnterprise_Dom_Test_ElementTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @test
 	 */
 	public function testSetAttribute()
 	{
@@ -103,7 +97,6 @@ class EbayEnterprise_Dom_Test_ElementTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @test
 	 */
 	public function testAddAttribute()
 	{
@@ -114,7 +107,6 @@ class EbayEnterprise_Dom_Test_ElementTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @test
 	 */
 	public function testCreateChildWithNsAttribute()
 	{
@@ -135,7 +127,6 @@ class EbayEnterprise_Dom_Test_ElementTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Method should pass through to the owner document's setNode, using itself
 	 * as the context node.
-	 * @test
 	 */
 	public function testSetNode()
 	{
@@ -169,7 +160,6 @@ class EbayEnterprise_Dom_Test_ElementTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @test
 	 */
 	public function testAddAttributes()
 	{
@@ -186,7 +176,6 @@ class EbayEnterprise_Dom_Test_ElementTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Testing helper coerce method, it will throw exception when array is pass to it.
 	 *
-	 * @test
 	 */
 	public function testValueCoersioWithException()
 	{
@@ -196,7 +185,6 @@ class EbayEnterprise_Dom_Test_ElementTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @test
 	 */
 	public function testDefaultNs()
 	{
