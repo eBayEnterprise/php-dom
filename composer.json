@@ -1,6 +1,6 @@
 {
 	"name": "ebayenterprise/php-dom",
-	"description": "Platform for injecting configuration fields into the configuration of a third module.",
+	"description": "eBay Enterprise Convenience Wrapper for PHP DOM",
 	"license": "OSL-3.0",
 	"authors": [
 		{
@@ -28,20 +28,19 @@
 	"minimum-stability": "dev",
 	"prefer-stable": true,
 	"require-dev": {
-		"squizlabs/php_codesniffer": "~1.5",
-		"phpunit/php-invoker": "~1.1",
-		"phpunit/phpunit": "~3.7",
+		"pdepend/pdepend": "~1.1",
+		"phpdocumentor/phpdocumentor":"~2.4",
+		"phploc/phploc": "~2.0",
+		"phpmd/phpmd": "~1.5",
 		"phpunit/dbunit": "~1",
-		"phpunit/phpunit-selenium": "~1",
+		"phpunit/php-invoker": "~1.1",
 		"phpunit/phpunit-story": "~1",
 		"sebastian/phpcpd": "~2.0",
-		"phpdocumentor/phpdocumentor":"~2.4",
-		"pdepend/pdepend": "~1.1",
-		"phpmd/phpmd": "~1.5",
-		"phploc/phploc": "~2.0",
-		"ivanchepurnyi/ecomdev_phpunit": "*"
+		"squizlabs/php_codesniffer": "~1.5"
 	},
-	"suggest": {
-		"magento-hackathon/magento-composer-installer": "Properly installs the module within a Magento instance"
+	"extra": {
+		"branch-alias": {
+			"dev-master": "1.0.x-dev"
+		}
 	}
 }
