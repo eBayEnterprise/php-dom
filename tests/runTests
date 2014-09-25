@@ -1,4 +1,7 @@
 #!/bin/bash -e
-
+xdebug_extension='lib/php/extensions/xdebug.so';
+xdebug_location="$(nix-store -qR ~/.nix-profile | fgrep xdebug | head -n 1)/${xdebug_extension}";
+(
 # Run phpunit
-vendor/bin/phpunit src/lib/EbayEnterprise/Dom "$@" # This argument list should usually be empty, but can be switched to --debug or other flags for quick checks. Such as when phpunit suddenly starts segfaulting on Jenkins.
+php -d zend_extension="${xdebug_location}" vendor/bin/phpunit -d date.timezone='America/New_York' -c tests/local.xml.phpunit "$@" src/lib/EbayEnterprise/Dom # This argument list should usually be empty, but can be switched to --debug or other flags for quick checks. Such as when phpunit suddenly starts segfaulting on Jenkins.
+)
