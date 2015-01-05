@@ -1,14 +1,14 @@
 <?php
 /**
  * Copyright (c) 2013-2014 eBay Enterprise, Inc.
- * 
+ *
  * NOTICE OF LICENSE
- * 
+ *
  * This source file is subject to the Open Software License (OSL 3.0)
  * that is bundled with this package in the file LICENSE.md.
  * It is also available through the world-wide-web at this URL:
  * http://opensource.org/licenses/osl-3.0.php
- * 
+ *
  * @copyright   Copyright (c) 2013-2014 eBay Enterprise, Inc. (http://www.ebayenterprise.com/)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -171,17 +171,6 @@ class EbayEnterprise_Dom_Test_ElementTest extends PHPUnit_Framework_TestCase
 		$this->assertSame('baz', $this->root->getAttribute('foo'));
 		$this->assertSame('biz', $this->root->getAttribute('_1234'));
 		$this->assertSame('234', $this->root->getAttribute('id'));
-	}
-
-	/**
-	 * Testing helper coerce method, it will throw exception when array is pass to it.
-	 *
-	 */
-	public function testValueCoersioWithException()
-	{
-		$this->assertNotEmpty(
-			$this->root->createChild('object', array())
-		);
 	}
 
 	/**
