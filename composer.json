@@ -2,45 +2,21 @@
 	"name": "ebayenterprise/php-dom",
 	"description": "eBay Enterprise Convenience Wrapper for PHP DOM",
 	"license": "OSL-3.0",
-	"authors": [
-		{
-			"name": "Scott van Brug",
-			"email": "svanbrug@ebay.com"
-		},
-		{
-			"name": "Michael Phang",
-			"email": "mphang@ebay.com"
-		},
-		{
-			"name": "Michael A. Smith",
-			"email": "msmith3@ebay.com"
-		},
-		{
-			"name": "Mike West",
-			"email": "micwest@ebay.com"
-		},
-		{
-			"name": "Reginald Gabriel",
-			"email": "rgabriel@ebay.com"
-		}
-	],
 	"type": "magento-module",
-	"minimum-stability": "dev",
-	"prefer-stable": true,
+	"authors": [
+		{ "name": "Michael A. Smith", "email": "msmith3@ebay.com" },
+		{ "name": "Michael Phang", "email": "mphang@ebay.com" },
+		{ "name": "Mike West", "email": "micwest@ebay.com" },
+		{ "name": "Reginald Gabriel", "email": "rgabriel@ebay.com" },
+		{ "name": "Scott van Brug", "email": "svanbrug@ebay.com" }
+	],
 	"require-dev": {
-		"pdepend/pdepend": "~1.1",
-		"phpdocumentor/phpdocumentor":"~2.4",
-		"phploc/phploc": "~2.0",
-		"phpmd/phpmd": "~1.5",
-		"phpunit/dbunit": "~1",
-		"phpunit/php-invoker": "~1.1",
-		"phpunit/phpunit-story": "~1",
-		"sebastian/phpcpd": "~2.0",
-		"squizlabs/php_codesniffer": "~1.5"
-	},
-	"extra": {
-		"branch-alias": {
-			"dev-master": "1.0.x-dev"
-		}
+		"pdepend/pdepend": ">=1.1",
+		"phpdocumentor/phpdocumentor":">=2.4",
+		"phploc/phploc": ">=2.0",
+		"phpmd/phpmd": ">=1.5",
+		"phpunit/phpunit": ">=3",
+		"sebastian/phpcpd": ">=2.0",
+		"squizlabs/php_codesniffer": ">=1.5"
 	}
 }
